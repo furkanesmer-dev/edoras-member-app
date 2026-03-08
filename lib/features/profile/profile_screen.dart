@@ -341,7 +341,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final ad = _asStringOrNull(p['ad']) ?? '';
     final soyad = _asStringOrNull(p['soyad']) ?? '';
-    final fullName = (ad + ' ' + soyad).trim();
+    final fullName = ('$ad $soyad').trim();
 
     final email = _asStringOrNull(p['eposta_adresi']);
     final phone = _asStringOrNull(p['tel_no']);
@@ -1552,7 +1552,7 @@ class _PremiumDropdownField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      value: value,
+      initialValue: value,
       items: items,
       onChanged: onChanged,
       icon: const Icon(Icons.keyboard_arrow_down_rounded),
