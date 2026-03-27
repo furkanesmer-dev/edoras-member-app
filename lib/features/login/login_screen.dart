@@ -35,6 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _doLogin() async {
+    if (_loading) return;
+
     final login = _loginCtl.text.trim();
     final pass = _passCtl.text;
 
@@ -73,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ?.toString();
 
       if (token == null || token.isEmpty) {
-        throw Exception('Token alınamadı. Response: $data');
+        throw Exception('Giriş doğrulanamadı. Lütfen bilgilerinizi kontrol edip tekrar deneyin.');
       }
 
       await widget.tokenStorage.writeToken(token);

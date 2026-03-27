@@ -93,6 +93,7 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<void> _loadMe() async {
+    if (_loadingMe) return;
     setState(() {
       _loadingMe = true;
       _meError = null;

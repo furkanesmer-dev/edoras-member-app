@@ -56,14 +56,10 @@ class HomeScreenState extends State<HomeScreen> {
     try {
       final api = widget.apiClient;
 
-      final results = await Future.wait([
-        api.dio.get('/profile/me.php'),
-        api.dio.get('/workout/summary.php'),
-        api.dio.get('/beslenme/summary.php'),
-        api.dio.get('/seans/upcoming.php'),
-      ]);
-
-      final meAll = _extractDataMap(results[0].data);
+      // Profil kritik — hata olursa ekranı tamamen hata göster.
+      // Diğer 3 istek ise yardımcı; başarısız olursa kısmi veri göster.
+      final meRes = await api.dio.get('/profile/me.php');
+      final meAll = _extractDataMap(meRes.data);
       final profile = (meAll['profile'] is Map)
           ? Map<String, dynamic>.from(meAll['profile'])
           : <String, dynamic>{};
@@ -74,19 +70,31 @@ class HomeScreenState extends State<HomeScreen> {
           ? Map<String, dynamic>.from(meAll['targets'])
           : <String, dynamic>{};
 
-      final workoutData = _extractDataMap(results[1].data);
-      final beslenmeData = _extractDataMap(results[2].data);
+      // Yardımcı veriler — başarısız olursa null bırak, hata verme.
+      final supplementary = await Future.wait([
+        api.dio.get('/workout/summary.php').catchError((_) => null),
+        api.dio.get('/beslenme/summary.php').catchError((_) => null),
+        api.dio.get('/seans/upcoming.php').catchError((_) => null),
+      ]);
 
-      final upcomingMap = (results[3].data is Map)
-          ? Map<String, dynamic>.from(results[3].data)
-          : <String, dynamic>{};
+      final workoutData = supplementary[0] != null
+          ? _extractDataMap(supplementary[0]!.data)
+          : null;
+      final beslenmeData = supplementary[1] != null
+          ? _extractDataMap(supplementary[1]!.data)
+          : null;
 
       Map<String, dynamic>? upcomingItem;
-      if (upcomingMap['item'] is Map) {
-        upcomingItem = Map<String, dynamic>.from(upcomingMap['item']);
-      } else if (upcomingMap['data'] is Map) {
-        final d = Map<String, dynamic>.from(upcomingMap['data']);
-        if (d['item'] is Map) upcomingItem = Map<String, dynamic>.from(d['item']);
+      if (supplementary[2] != null) {
+        final upcomingMap = (supplementary[2]!.data is Map)
+            ? Map<String, dynamic>.from(supplementary[2]!.data)
+            : <String, dynamic>{};
+        if (upcomingMap['item'] is Map) {
+          upcomingItem = Map<String, dynamic>.from(upcomingMap['item']);
+        } else if (upcomingMap['data'] is Map) {
+          final d = Map<String, dynamic>.from(upcomingMap['data']);
+          if (d['item'] is Map) upcomingItem = Map<String, dynamic>.from(d['item']);
+        }
       }
 
       if (!mounted) return;

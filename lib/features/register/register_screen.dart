@@ -221,7 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: (v) {
                         final s = v ?? '';
                         if (s.isEmpty) return 'Parola zorunlu';
-                        if (s.length < 6) return 'Parola en az 6 karakter olmalı';
+                        if (s.length < 8) return 'Parola en az 8 karakter olmalı';
                         return null;
                       },
                     ),

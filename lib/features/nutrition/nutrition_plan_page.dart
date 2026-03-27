@@ -118,8 +118,9 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
             mapped[meal] = list;
           }
         }
-      } catch (_) {
-        // Tick verisi gelmezse ekran çalışmaya devam etsin.
+      } catch (e) {
+        // ignore: avoid_print
+        print('Günlük tick verisi alınamadı: $e');
       }
 
       double? targetKcal;
@@ -140,8 +141,9 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
           targetKarb = t['karb_g'] != null ? _toDouble(t['karb_g']) : null;
           targetYag = t['yag_g'] != null ? _toDouble(t['yag_g']) : null;
         }
-      } catch (_) {
-        // Hedefler gelmezse de ekran çalışsın.
+      } catch (e) {
+        // ignore: avoid_print
+        print('Beslenme hedefleri alınamadı: $e');
       }
 
       if (!mounted) return;
