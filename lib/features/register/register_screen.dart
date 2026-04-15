@@ -153,26 +153,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         // Logo
                         Center(
-                          child: Container(
-                            width: 72,
-                            height: 72,
-                            decoration: BoxDecoration(
-                              color: isDark ? AppColors.darkSurface : Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.15),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.all(12),
+                          child: ColorFiltered(
+                            colorFilter: isDark
+                                ? const ColorFilter.matrix([
+                                    -1, 0, 0, 0, 255,
+                                    0, -1, 0, 0, 255,
+                                    0, 0, -1, 0, 255,
+                                    0, 0, 0, 1, 0,
+                                  ])
+                                : const ColorFilter.mode(
+                                    Colors.transparent, BlendMode.multiply),
                             child: Image.asset(
                               'assets/icons/edoras_logo_black_transparent_1024.png',
+                              height: 110,
                               fit: BoxFit.contain,
                             ),
                           ),

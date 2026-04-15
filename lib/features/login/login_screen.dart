@@ -130,28 +130,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // Logo
                       Center(
-                        child: Container(
-                          width: 90,
-                          height: 90,
-                          decoration: BoxDecoration(
-                            color: isDark ? AppColors.darkSurface : Colors.white,
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withOpacity(0.15),
-                                blurRadius: 24,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          padding: const EdgeInsets.all(14),
+                        child: ColorFiltered(
+                          colorFilter: isDark
+                              ? const ColorFilter.matrix([
+                                  -1, 0, 0, 0, 255,
+                                  0, -1, 0, 0, 255,
+                                  0, 0, -1, 0, 255,
+                                  0, 0, 0, 1, 0,
+                                ])
+                              : const ColorFilter.mode(
+                                  Colors.transparent, BlendMode.multiply),
                           child: Image.asset(
-                            isDark
-                                ? 'assets/icons/edoras_logo_black_transparent_1024.png'
-                                : 'assets/icons/edoras_logo_black_transparent_1024.png',
+                            'assets/icons/edoras_logo_black_transparent_1024.png',
+                            height: 130,
                             fit: BoxFit.contain,
                           ),
                         ),
