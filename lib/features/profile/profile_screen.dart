@@ -839,9 +839,9 @@ class _AvatarButtonLarge extends StatelessWidget {
                           ),
                         );
                       },
-                      errorBuilder: (_, __, ___) => _fallbackAvatar(),
+                      errorBuilder: (ctx, __, ___) => _fallbackAvatar(ctx),
                     )
-                  : _fallbackAvatar(),
+                  : _fallbackAvatar(context),
             ),
           ),
           Positioned(
@@ -890,14 +890,15 @@ class _AvatarButtonLarge extends StatelessWidget {
     );
   }
 
-  Widget _fallbackAvatar() {
+  Widget _fallbackAvatar(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: const Color(0xFFF3F7FD),
+      color: isDark ? AppColors.darkSurface2 : const Color(0xFFF3F7FD),
       alignment: Alignment.center,
-      child: const Icon(
+      child: Icon(
         Icons.person_rounded,
         size: 46,
-        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
+        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
       ),
     );
   }
@@ -1500,12 +1501,13 @@ class _PremiumTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      style: const TextStyle(
-        color: Color(0xFF111827),
+      style: TextStyle(
+        color: isDark ? AppColors.darkText : AppColors.lightText,
         fontWeight: FontWeight.w700,
       ),
       decoration: InputDecoration(
@@ -1586,6 +1588,7 @@ class _DatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -1609,8 +1612,8 @@ class _DatePickerField extends StatelessWidget {
             Expanded(
               child: Text(
                 value,
-                style: const TextStyle(
-                  color: Color(0xFF111827),
+                style: TextStyle(
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w700,
                 ),
               ),

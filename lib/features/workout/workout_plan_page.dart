@@ -257,6 +257,7 @@ class _WorkoutPlanView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final hasPlan = _asBool(data['has_plan']) || _asBool(data['hasPlan']);
 
     if (!hasPlan) {
@@ -314,7 +315,7 @@ class _WorkoutPlanView extends StatelessWidget {
               Text(
                 'Antrenman Günleri',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: const Color(0xFF111827),
+                      color: isDark ? AppColors.darkText : AppColors.lightText,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.2,
                     ),
@@ -367,6 +368,7 @@ class _WorkoutDayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: EdgeInsets.zero,
       child: Theme(
@@ -397,7 +399,7 @@ class _WorkoutDayCard extends StatelessWidget {
           title: Text(
             dayName,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.2,
                 ),
@@ -407,7 +409,7 @@ class _WorkoutDayCard extends StatelessWidget {
             child: Text(
               '${exercises.length} egzersiz',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF667085),
+                    color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -447,6 +449,7 @@ class _ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final name =
         (ex['exercise_name'] ?? ex['name'] ?? ex['egzersiz'] ?? 'Egzersiz')
             .toString();
@@ -494,7 +497,7 @@ class _ExerciseCard extends StatelessWidget {
           child: Text(
             'GIF yüklenemedi',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w700,
                 ),
           ),
@@ -544,14 +547,14 @@ class _ExerciseCard extends StatelessWidget {
                 child: gif == null
                     ? const Icon(
                         Icons.image_not_supported_rounded,
-                        color: Color(0xFF667085),
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       )
                     : Image.network(
                         gif,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => const Icon(
                           Icons.broken_image_outlined,
-                          color: Color(0xFF667085),
+                          color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         ),
                       ),
               ),
@@ -563,7 +566,7 @@ class _ExerciseCard extends StatelessWidget {
                     Text(
                       name,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: isDark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                           ),
                     ),
@@ -571,7 +574,7 @@ class _ExerciseCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -636,6 +639,7 @@ class _WorkoutErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
         const _BrightWorkoutBackground(),
@@ -679,7 +683,7 @@ class _WorkoutErrorView extends StatelessWidget {
                     'Antrenman sayfası yüklenemedi',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: const Color(0xFF111827),
+                          color: isDark ? AppColors.darkText : AppColors.lightText,
                           fontWeight: FontWeight.w900,
                         ),
                   ),
@@ -688,7 +692,7 @@ class _WorkoutErrorView extends StatelessWidget {
                     msg,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF667085),
+                          color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                           fontWeight: FontWeight.w600,
                           height: 1.45,
                         ),
@@ -700,7 +704,7 @@ class _WorkoutErrorView extends StatelessWidget {
                       onPressed: onRetry,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: const Color(0xFF111827),
+                        backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
@@ -729,6 +733,7 @@ class _WorkoutEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -771,7 +776,7 @@ class _WorkoutEmptyState extends StatelessWidget {
             'Aktif antrenman planın bulunmuyor',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.2,
                 ),
@@ -781,7 +786,7 @@ class _WorkoutEmptyState extends StatelessWidget {
             'Eğitmenin sana aktif bir plan oluşturduğunda bu ekranda direkt onu göreceksin.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w600,
                   height: 1.5,
                 ),
@@ -801,6 +806,7 @@ class _ArchiveEntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -842,7 +848,7 @@ class _ArchiveEntryCard extends StatelessWidget {
                     Text(
                       'Geçmiş Planlar',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: isDark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                           ),
                     ),
@@ -850,7 +856,7 @@ class _ArchiveEntryCard extends StatelessWidget {
                     Text(
                       'Arşivdeki planlarını ayrı ekranda görüntüle.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                             fontWeight: FontWeight.w700,
                             height: 1.4,
                           ),
@@ -886,6 +892,7 @@ class _WorkoutHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -954,7 +961,7 @@ class _WorkoutHeroCard extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.5,
                   height: 1.08,
@@ -964,7 +971,7 @@ class _WorkoutHeroCard extends StatelessWidget {
           Text(
             'Antrenman sekmesine girdiğinde öncelikle aktif planını görürsün. Geçmiş planlar altta ayrı erişim olarak tutulur.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w600,
                   height: 1.4,
                 ),
@@ -1019,6 +1026,7 @@ class _HeroInfoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final child = Container(
       height: 46,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -1036,7 +1044,7 @@ class _HeroInfoChip extends StatelessWidget {
               text,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF111827),
+                    color: isDark ? AppColors.darkText : AppColors.lightText,
                     fontWeight: FontWeight.w800,
                   ),
             ),

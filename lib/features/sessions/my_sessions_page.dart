@@ -201,7 +201,7 @@ class MySessionsPageState extends State<MySessionsPage> {
       default:
         return (
           bg: const Color(0xFFF4F7FB),
-          fg: const Color(0xFF667085),
+          fg: AppColors.lightTextSub,
           border: const Color(0xFFE7EDF5),
           icon: Icons.info_rounded,
         );
@@ -608,6 +608,7 @@ class _SessionsHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
       child: Stack(
@@ -660,7 +661,7 @@ class _SessionsHeroCard extends StatelessWidget {
               Text(
                 'Programını takip et,\nritmini koru.',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: const Color(0xFF111827),
+                      color: isDark ? AppColors.darkText : AppColors.lightText,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
                       height: 1.08,
@@ -670,7 +671,7 @@ class _SessionsHeroCard extends StatelessWidget {
               Text(
                 'Yaklaşan seanslarını görüntüle, geçmiş kayıtlarını incele ve seans akışını tek ekrandan yönet.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       fontWeight: FontWeight.w600,
                       height: 1.35,
                     ),
@@ -701,6 +702,7 @@ class _PackageSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Column(
@@ -740,7 +742,7 @@ class _PackageSummaryCard extends StatelessWidget {
                     Text(
                       'Paket Özeti',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: isDark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.2,
                           ),
@@ -749,7 +751,7 @@ class _PackageSummaryCard extends StatelessWidget {
                     Text(
                       'Aktif paket ve tarih bilgilerin burada yer alır.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -818,6 +820,7 @@ class _MiniStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
       child: Column(
@@ -838,7 +841,7 @@ class _MiniStatCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w800,
                 ),
           ),
@@ -848,7 +851,7 @@ class _MiniStatCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.3,
                   height: 1,
@@ -875,6 +878,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Container(
@@ -894,7 +898,7 @@ class _SectionHeader extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: const Color(0xFF111827),
+                      color: isDark ? AppColors.darkText : AppColors.lightText,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.2,
                     ),
@@ -903,7 +907,7 @@ class _SectionHeader extends StatelessWidget {
               Text(
                 subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       fontWeight: FontWeight.w600,
                     ),
               ),
@@ -938,6 +942,7 @@ class _SessionPremiumCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Column(
@@ -973,7 +978,7 @@ class _SessionPremiumCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: isDark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.2,
                           ),
@@ -1079,6 +1084,7 @@ class _DetailChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -1097,7 +1103,7 @@ class _DetailChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF111827),
+                    color: isDark ? AppColors.darkText : AppColors.lightText,
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -1179,6 +1185,7 @@ class _TabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOut,
@@ -1210,7 +1217,7 @@ class _TabButton extends StatelessWidget {
                     label,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: selected ? Colors.white : const Color(0xFF667085),
+                          color: selected ? Colors.white : (isDark ? AppColors.darkTextSub : AppColors.lightTextSub),
                           fontWeight: FontWeight.w800,
                         ),
                   ),
@@ -1256,6 +1263,7 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
@@ -1284,7 +1292,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -1294,7 +1302,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF111827),
+                        color: isDark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -1322,6 +1330,7 @@ class _EmptyStateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: const EdgeInsets.fromLTRB(18, 22, 18, 22),
       child: Column(
@@ -1340,7 +1349,7 @@ class _EmptyStateCard extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                 ),
           ),
@@ -1349,7 +1358,7 @@ class _EmptyStateCard extends StatelessWidget {
             subtitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w600,
                   height: 1.35,
                 ),
@@ -1371,6 +1380,7 @@ class _ErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
       child: Column(
@@ -1393,7 +1403,7 @@ class _ErrorCard extends StatelessWidget {
           Text(
             'Bir hata oluştu',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                 ),
           ),
@@ -1402,7 +1412,7 @@ class _ErrorCard extends StatelessWidget {
             message,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w600,
                   height: 1.35,
                 ),
