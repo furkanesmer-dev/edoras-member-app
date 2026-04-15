@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:edoras_member_app/core/api/api_client.dart';
 import 'package:edoras_member_app/core/storage/token_storage.dart';
+import 'package:edoras_member_app/core/theme/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
@@ -413,7 +414,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         'Not: Yağ oranı ve bazı değerler sistem tarafından otomatik hesaplanabilir.',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF667085),
+                              color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                               fontWeight: FontWeight.w600,
                               height: 1.35,
                             ),
@@ -435,7 +436,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await showModalBottomSheet(
       context: context,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? AppColors.darkSurface
+            : Colors.white,
       builder: (ctx) {
         return SafeArea(
           child: Padding(
@@ -592,30 +595,22 @@ class _BrightProfileBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IgnorePointer(
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFDFEFF),
-              Color(0xFFF7FAFF),
-              Color(0xFFF9FCFF),
-            ],
-          ),
-        ),
+        color: isDark ? AppColors.darkBg : AppColors.lightBg,
         child: Stack(
           children: [
             Positioned(
               top: -80,
               right: -30,
               child: Container(
-                width: 220,
-                height: 220,
+                width: 240,
+                height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withOpacity(0.12),
+                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -627,7 +622,7 @@ class _BrightProfileBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFFF8C5A).withOpacity(0.09),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.07),
                 ),
               ),
             ),
@@ -639,7 +634,7 @@ class _BrightProfileBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF17C67B).withOpacity(0.08),
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -739,7 +734,7 @@ class _PremiumProfileHero extends StatelessWidget {
                 fullName,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: const Color(0xFF111827),
+                      color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.3,
                     ),
@@ -749,7 +744,7 @@ class _PremiumProfileHero extends StatelessWidget {
                 'Profil bilgilerini güncelle, ölçülerini yönet ve hedeflerini kontrol et.',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       fontWeight: FontWeight.w600,
                       height: 1.35,
                     ),
@@ -902,7 +897,7 @@ class _AvatarButtonLarge extends StatelessWidget {
       child: const Icon(
         Icons.person_rounded,
         size: 46,
-        color: Color(0xFF667085),
+        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
       ),
     );
   }
@@ -963,7 +958,7 @@ class _PremiumSubscriptionCard extends StatelessWidget {
                     Text(
                       'Abonelik Durumu',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.2,
                           ),
@@ -972,7 +967,7 @@ class _PremiumSubscriptionCard extends StatelessWidget {
                     Text(
                       uyeAktif ? 'Üyelik aktif görünüyor' : 'Üyelik pasif görünüyor',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -1666,7 +1661,7 @@ class _CardSectionHeader extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: const Color(0xFF111827),
+                      color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.2,
                     ),
@@ -1675,7 +1670,7 @@ class _CardSectionHeader extends StatelessWidget {
               Text(
                 subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       fontWeight: FontWeight.w600,
                     ),
               ),
@@ -1726,7 +1721,7 @@ class _MetricTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w800,
                 ),
           ),
@@ -1736,7 +1731,7 @@ class _MetricTile extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.2,
                   height: 1.1,
@@ -1798,7 +1793,7 @@ class _HeroTargetTile extends StatelessWidget {
                 Text(
                   label,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -1809,7 +1804,7 @@ class _HeroTargetTile extends StatelessWidget {
                     Text(
                       value,
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.7,
                             height: 1,
@@ -1821,7 +1816,7 @@ class _HeroTargetTile extends StatelessWidget {
                       child: Text(
                         suffix,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: const Color(0xFF667085),
+                              color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                               fontWeight: FontWeight.w800,
                             ),
                       ),
@@ -1879,7 +1874,7 @@ class _MacroTargetTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w800,
                 ),
           ),
@@ -1892,7 +1887,7 @@ class _MacroTargetTile extends StatelessWidget {
                   value,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: const Color(0xFF111827),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w900,
                         height: 1,
                         letterSpacing: -0.3,
@@ -1905,7 +1900,7 @@ class _MacroTargetTile extends StatelessWidget {
                 child: Text(
                   suffix,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -1989,7 +1984,7 @@ class _ContactInfoChip extends StatelessWidget {
               text,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF111827),
+                    color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -2147,7 +2142,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -2157,7 +2152,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF111827),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -2205,7 +2200,7 @@ class _SheetActionTile extends StatelessWidget {
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF111827),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w700,
                       ),
                 ),
@@ -2252,7 +2247,7 @@ class _ErrorCard extends StatelessWidget {
           Text(
             'Bir hata oluştu',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                 ),
           ),
@@ -2261,7 +2256,7 @@ class _ErrorCard extends StatelessWidget {
             message,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w600,
                   height: 1.35,
                 ),
@@ -2305,30 +2300,27 @@ class _PremiumCardSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFFFFF),
-            Color(0xFFFCFDFF),
-          ],
-        ),
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         border: Border.all(
-          color: const Color(0xFFE8EEF7),
-          width: 1.1,
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF8DAEF5).withOpacity(0.12),
+            color: isDark
+                ? Colors.black.withOpacity(0.28)
+                : AppColors.primary.withOpacity(0.06),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(isDark ? 0.18 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

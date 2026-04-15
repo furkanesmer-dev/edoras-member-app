@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:edoras_member_app/core/api/api_client.dart';
+import 'package:edoras_member_app/core/theme/app_colors.dart';
 import 'package:edoras_member_app/features/workout/workout_plans_page.dart';
 
 class WorkoutPlanPage extends StatefulWidget {
@@ -1060,17 +1061,19 @@ class _PremiumCardSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFE7ECF3)),
-        boxShadow: const [
+        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x0A101828),
+            color: isDark ? Colors.black.withOpacity(0.28) : AppColors.primary.withOpacity(0.06),
             blurRadius: 22,
-            offset: Offset(0, 10),
+            offset: const Offset(0, 10),
           ),
         ],
       ),
@@ -1086,20 +1089,22 @@ class _EmptyMiniBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 2, 16, 16),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8FAFC),
+          color: isDark ? AppColors.darkSurface2 : AppColors.lightSurface2,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE7ECF3)),
+          border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
         ),
         child: Text(
           text,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: const Color(0xFF667085),
+                color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                 fontWeight: FontWeight.w700,
                 height: 1.4,
               ),
@@ -1116,12 +1121,14 @@ class _LoadingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: const Color(0xFFE7ECF3)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
       ),
     );
   }
@@ -1132,30 +1139,22 @@ class _BrightWorkoutBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IgnorePointer(
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFDFEFF),
-              Color(0xFFF7FAFF),
-              Color(0xFFF9FCFF),
-            ],
-          ),
-        ),
+        color: isDark ? AppColors.darkBg : AppColors.lightBg,
         child: Stack(
           children: [
             Positioned(
               top: -80,
               right: -30,
               child: Container(
-                width: 220,
-                height: 220,
+                width: 240,
+                height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withOpacity(0.12),
+                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -1167,7 +1166,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFFF8C5A).withOpacity(0.09),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -1179,7 +1178,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF17C67B).withOpacity(0.08),
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:edoras_member_app/core/api/api_client.dart';
 import 'package:edoras_member_app/core/storage/token_storage.dart';
+import 'package:edoras_member_app/core/theme/app_colors.dart';
 import 'package:edoras_member_app/features/profile/profile_screen.dart';
 import 'package:edoras_member_app/core/ui/widgets/state_views.dart';
 
@@ -342,54 +343,46 @@ class _BrightHomeBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IgnorePointer(
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFDFEFF),
-              Color(0xFFF7FAFF),
-              Color(0xFFF9FCFF),
-            ],
-          ),
-        ),
+        color: isDark ? AppColors.darkBg : AppColors.lightBg,
         child: Stack(
           children: [
             Positioned(
               top: -80,
               right: -30,
               child: Container(
-                width: 220,
-                height: 220,
+                width: 250,
+                height: 250,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withOpacity(0.12),
+                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
             Positioned(
-              top: 120,
+              top: 160,
               left: -50,
-              child: Container(
-                width: 170,
-                height: 170,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFFF8C5A).withOpacity(0.09),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 80,
-              right: -40,
               child: Container(
                 width: 180,
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF17C67B).withOpacity(0.08),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.07),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 100,
+              right: -40,
+              child: Container(
+                width: 160,
+                height: 160,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.06),
                 ),
               ),
             ),
@@ -413,8 +406,9 @@ class _TopHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const titleColor = Color(0xFF111827);
-    const subtitleColor = Color(0xFF6B7280);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final titleColor = isDark ? AppColors.darkText : AppColors.lightText;
+    final subtitleColor = isDark ? AppColors.darkTextSub : AppColors.lightTextSub;
 
     return Row(
       children: [
@@ -466,26 +460,26 @@ class _AvatarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(999),
       child: Container(
-        height: 48,
-        width: 48,
+        height: 50,
+        width: 50,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white,
-          border: Border.all(color: Colors.white, width: 2),
+          color: isDark ? AppColors.darkSurface : Colors.white,
+          border: Border.all(
+            color: isDark ? AppColors.primaryLight.withOpacity(0.40) : AppColors.primary.withOpacity(0.25),
+            width: 2,
+          ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF7AA7FF).withOpacity(0.16),
-              blurRadius: 22,
-              offset: const Offset(0, 8),
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 12,
-              offset: const Offset(0, 5),
+              color: AppColors.primary.withOpacity(0.20),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
@@ -494,28 +488,28 @@ class _AvatarButton extends StatelessWidget {
               ? Image.network(
                   photoUrl!,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const Icon(
+                  errorBuilder: (_, __, ___) => Icon(
                     Icons.person_rounded,
-                    color: Color(0xFF667085),
+                    color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                     size: 24,
                   ),
                   loadingBuilder: (context, child, progress) {
                     if (progress == null) return child;
-                    return const Center(
+                    return Center(
                       child: SizedBox(
                         height: 18,
                         width: 18,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          color: Color(0xFF4F7CFF),
+                          color: AppColors.primary,
                         ),
                       ),
                     );
                   },
                 )
-              : const Icon(
+              : Icon(
                   Icons.person_rounded,
-                  color: Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   size: 24,
                 ),
         ),
@@ -537,6 +531,10 @@ class _HeroWelcomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? AppColors.darkText : AppColors.lightText;
+    final subColor  = isDark ? AppColors.darkTextSub : AppColors.lightTextSub;
+
     return _PremiumCardSurface(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
       child: Stack(
@@ -549,7 +547,7 @@ class _HeroWelcomeCard extends StatelessWidget {
               height: 88,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF7FB2FF).withOpacity(0.18),
+                color: AppColors.primary.withOpacity(isDark ? 0.12 : 0.08),
               ),
             ),
           ),
@@ -561,7 +559,7 @@ class _HeroWelcomeCard extends StatelessWidget {
               height: 92,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFFFB074).withOpacity(0.14),
+                color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.07),
               ),
             ),
           ),
@@ -572,7 +570,7 @@ class _HeroWelcomeCard extends StatelessWidget {
               Text(
                 'Bugün kendin için iyi bir gün.',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: const Color(0xFF111827),
+                      color: textColor,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
                       height: 1.08,
@@ -582,7 +580,7 @@ class _HeroWelcomeCard extends StatelessWidget {
               Text(
                 'Programlarını takip et, seanslarını kaçırma ve hedeflerini her gün biraz daha ileri taşı.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: subColor,
                       fontWeight: FontWeight.w600,
                       height: 1.35,
                     ),
@@ -594,7 +592,7 @@ class _HeroWelcomeCard extends StatelessWidget {
                     child: _HeroMiniButton(
                       label: 'Antrenman',
                       icon: Icons.local_fire_department_rounded,
-                      color: const Color(0xFFFF7A18),
+                      color: AppColors.primary,
                       onTap: onWorkoutTap,
                     ),
                   ),
@@ -602,8 +600,8 @@ class _HeroWelcomeCard extends StatelessWidget {
                   Expanded(
                     child: _HeroMiniButton(
                       label: 'Beslenme',
-                      icon: Icons.restaurant_menu_rounded,
-                      color: const Color(0xFF14B86A),
+                      icon: Icons.restaurant_rounded,
+                      color: AppColors.success,
                       onTap: onNutritionTap,
                     ),
                   ),
@@ -632,8 +630,10 @@ class _HeroMiniButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Material(
-      color: color.withOpacity(0.10),
+      color: color.withOpacity(isDark ? 0.15 : 0.10),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
@@ -642,7 +642,7 @@ class _HeroMiniButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withOpacity(0.18)),
+            border: Border.all(color: color.withOpacity(0.22)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -653,8 +653,8 @@ class _HeroMiniButton extends StatelessWidget {
                 child: Text(
                   label,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF111827),
+                  style: TextStyle(
+                    color: isDark ? AppColors.darkText : AppColors.lightText,
                     fontWeight: FontWeight.w800,
                     fontSize: 13,
                   ),
@@ -721,7 +721,7 @@ class _SubscriptionPremiumCard extends StatelessWidget {
                     Text(
                       'Abonelik Durumu',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.2,
                           ),
@@ -730,7 +730,7 @@ class _SubscriptionPremiumCard extends StatelessWidget {
                     Text(
                       uyeAktif ? 'Üyeliğin aktif görünüyor' : 'Üyeliğin pasif görünüyor',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -903,7 +903,7 @@ class _PrimaryActionCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: const Color(0xFF111827),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w900,
                         letterSpacing: -0.25,
                       ),
@@ -914,7 +914,7 @@ class _PrimaryActionCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w600,
                         height: 1.3,
                       ),
@@ -988,7 +988,7 @@ class _CompactPremiumActionCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.2,
                 ),
@@ -1009,7 +1009,7 @@ class _CompactPremiumActionCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w600,
                   height: 1.28,
                 ),
@@ -1059,7 +1059,7 @@ class _CaloriesPremiumCard extends StatelessWidget {
                     Text(
                       'Günlük Hedef Kalori',
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                             fontWeight: FontWeight.w800,
                           ),
                     ),
@@ -1070,7 +1070,7 @@ class _CaloriesPremiumCard extends StatelessWidget {
                         Text(
                           _v(kcal),
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: const Color(0xFF111827),
+                                color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: -0.8,
                                 height: 1,
@@ -1082,7 +1082,7 @@ class _CaloriesPremiumCard extends StatelessWidget {
                           child: Text(
                             'kcal',
                             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                  color: const Color(0xFF667085),
+                                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                                   fontWeight: FontWeight.w800,
                                 ),
                           ),
@@ -1097,7 +1097,9 @@ class _CaloriesPremiumCard extends StatelessWidget {
           const SizedBox(height: 14),
           Container(
             height: 1,
-            color: const Color(0xFFE8EEF7),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.darkBorder
+                : AppColors.lightBorder,
           ),
           const SizedBox(height: 14),
           Row(
@@ -1151,15 +1153,17 @@ class _MacroStatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface2 : AppColors.lightSurface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
         boxShadow: [
           BoxShadow(
-            color: accent.withOpacity(0.08),
+            color: accent.withOpacity(0.10),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -1182,7 +1186,7 @@ class _MacroStatTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w800,
                 ),
           ),
@@ -1195,7 +1199,7 @@ class _MacroStatTile extends StatelessWidget {
                   value,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: const Color(0xFF111827),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w900,
                         letterSpacing: -0.3,
                         height: 1,
@@ -1208,7 +1212,7 @@ class _MacroStatTile extends StatelessWidget {
                 child: Text(
                   unit,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -1281,12 +1285,14 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBFDFF),
+        color: isDark ? AppColors.darkSurface2 : AppColors.lightSurface2,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
       ),
       child: Row(
         children: [
@@ -1309,7 +1315,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -1319,7 +1325,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF111827),
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -1407,30 +1413,27 @@ class _PremiumCardSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final content = Container(
       padding: padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFFFFF),
-            Color(0xFFFCFDFF),
-          ],
-        ),
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         border: Border.all(
-          color: const Color(0xFFE8EEF7),
-          width: 1.1,
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF8DAEF5).withOpacity(0.12),
+            color: isDark
+                ? Colors.black.withOpacity(0.30)
+                : AppColors.primary.withOpacity(0.06),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(isDark ? 0.20 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
