@@ -1133,13 +1133,15 @@ class _PremiumPillTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 56,
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F8FD),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFF5F8FD),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE6EDF7)),
+        border: Border.all(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE6EDF7)),
       ),
       child: Row(
         children: [

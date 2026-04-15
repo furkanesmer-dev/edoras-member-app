@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/api/api_client.dart';
+import '../../core/theme/app_colors.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
   final ApiClient apiClient;
@@ -157,13 +158,14 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final dateText = _dogumTarihi == null
         ? 'Seç'
         : '${_dogumTarihi!.day.toString().padLeft(2, '0')}.${_dogumTarihi!.month.toString().padLeft(2, '0')}.${_dogumTarihi!.year}';
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.darkBg : Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -178,10 +180,21 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     const SizedBox(height: 8),
 
                     Center(
-                      child: Image.asset(
-                        'assets/icons/edoras_logo_black_transparent_1024.png',
-                        height: 110,
-                        fit: BoxFit.contain,
+                      child: ColorFiltered(
+                        colorFilter: isDark
+                            ? const ColorFilter.matrix([
+                                -1, 0, 0, 0, 255,
+                                0, -1, 0, 0, 255,
+                                0, 0, -1, 0, 255,
+                                0, 0, 0, 1, 0,
+                              ])
+                            : const ColorFilter.mode(
+                                Colors.transparent, BlendMode.multiply),
+                        child: Image.asset(
+                          'assets/icons/edoras_logo_black_transparent_1024.png',
+                          height: 110,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
 
@@ -192,7 +205,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.w900,
                               letterSpacing: -0.2,
-                              color: Colors.black,
+                              color: isDark ? AppColors.darkText : Colors.black,
                             ),
                       ),
                     ),
@@ -378,20 +391,21 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
 
 InputDecoration _niceDecoration(BuildContext context, String label, {IconData? icon, String? helperText}) {
   final scheme = Theme.of(context).colorScheme;
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   return InputDecoration(
     labelText: label,
     helperText: helperText,
     prefixIcon: icon != null ? Icon(icon) : null,
     filled: true,
-    fillColor: const Color(0xFFF2F4F7),
+    fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFF2F4F7),
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: BorderSide(color: scheme.outlineVariant),
+      borderSide: BorderSide(color: isDark ? AppColors.darkBorder : scheme.outlineVariant),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(color: Color(0xFFE4E7EC)),
+      borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE4E7EC)),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),

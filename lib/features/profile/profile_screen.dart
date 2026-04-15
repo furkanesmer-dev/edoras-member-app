@@ -1763,17 +1763,19 @@ class _HeroTargetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFFEEF4FF),
-            Color(0xFFF7FAFF),
-          ],
-        ),
+        color: isDark ? AppColors.darkSurface2 : null,
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                colors: [Color(0xFFEEF4FF), Color(0xFFF7FAFF)],
+              ),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFDCE7FB)),
+        border: Border.all(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFDCE7FB)),
       ),
       child: Row(
         children: [
