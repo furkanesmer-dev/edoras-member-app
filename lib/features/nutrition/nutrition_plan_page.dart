@@ -1689,39 +1689,6 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _CircleIconButton extends StatelessWidget {
-  final IconData icon;
-  final Color accent;
-  final VoidCallback onTap;
-
-  const _CircleIconButton({
-    required this.icon,
-    required this.accent,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: accent.withOpacity(0.10),
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: accent.withOpacity(0.14)),
-          ),
-          child: Icon(icon, color: accent, size: 20),
-        ),
-      ),
-    );
-  }
-}
-
 class _PremiumCardSurface extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
