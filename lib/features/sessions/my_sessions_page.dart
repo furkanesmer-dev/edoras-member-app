@@ -640,23 +640,6 @@ class _SessionsHeroCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(999),
-                  color: const Color(0xFFEFF5FF),
-                  border: Border.all(color: const Color(0xFFD8E7FF)),
-                ),
-                child: const Text(
-                  'Seanslarım',
-                  style: TextStyle(
-                    color: Color(0xFF2852C8),
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12,
-                    height: 1,
-                  ),
-                ),
-              ),
               const SizedBox(height: 14),
               Text(
                 'Programını takip et,\nritmini koru.',

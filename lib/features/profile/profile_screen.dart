@@ -698,23 +698,6 @@ class _PremiumProfileHero extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(999),
-                      color: const Color(0xFFEFF5FF),
-                      border: Border.all(color: const Color(0xFFD8E7FF)),
-                    ),
-                    child: const Text(
-                      'Profil',
-                      style: TextStyle(
-                        color: Color(0xFF2852C8),
-                        fontWeight: FontWeight.w800,
-                        fontSize: 12,
-                        height: 1,
-                      ),
-                    ),
-                  ),
                   const Spacer(),
                   _CircleIconButton(
                     icon: Icons.logout_rounded,

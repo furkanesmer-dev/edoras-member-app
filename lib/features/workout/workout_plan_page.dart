@@ -930,23 +930,6 @@ class _WorkoutHeroCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(999),
-                  color: const Color(0xFFECFDF3),
-                  border: Border.all(color: const Color(0xFFD1FADF)),
-                ),
-                child: const Text(
-                  'Hazır',
-                  style: TextStyle(
-                    color: Color(0xFF067647),
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12,
-                    height: 1,
-                  ),
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 16),
