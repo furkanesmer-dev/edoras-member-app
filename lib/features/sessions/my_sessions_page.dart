@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:edoras_member_app/core/api/api_client.dart';
+import 'package:edoras_member_app/core/theme/app_colors.dart';
 
 class MySessionsPage extends StatefulWidget {
   final ApiClient apiClient;
@@ -542,30 +543,22 @@ class _BrightSessionsBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IgnorePointer(
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFDFEFF),
-              Color(0xFFF7FAFF),
-              Color(0xFFF9FCFF),
-            ],
-          ),
-        ),
+        color: isDark ? AppColors.darkBg : AppColors.lightBg,
         child: Stack(
           children: [
             Positioned(
               top: -80,
               right: -30,
               child: Container(
-                width: 220,
-                height: 220,
+                width: 240,
+                height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withOpacity(0.12),
+                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -577,7 +570,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFFF8C5A).withOpacity(0.09),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -589,7 +582,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF17C67B).withOpacity(0.08),
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -1453,30 +1446,27 @@ class _PremiumCardSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFFFFF),
-            Color(0xFFFCFDFF),
-          ],
-        ),
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         border: Border.all(
-          color: const Color(0xFFE8EEF7),
-          width: 1.1,
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF8DAEF5).withOpacity(0.12),
+            color: isDark
+                ? Colors.black.withOpacity(0.28)
+                : AppColors.primary.withOpacity(0.06),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(isDark ? 0.18 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
