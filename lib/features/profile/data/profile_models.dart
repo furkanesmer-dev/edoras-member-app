@@ -91,7 +91,7 @@ class MemberProfile {
     this.saglikSorunlari,
   });
 
-  static double? _asDouble(dynamic v) {
+  double? _asDouble(dynamic v) {
     if (v == null) return null;
     if (v is num) return v.toDouble();
     return double.tryParse(v.toString().replaceAll(',', '.'));
@@ -99,19 +99,19 @@ class MemberProfile {
 
   factory MemberProfile.fromJson(Map<String, dynamic> json) {
     return MemberProfile(
-      id: (json['id'] as num?)?.toInt() ?? 0,
+      id: (json['id'] as num).toInt(),
       ad: json['ad']?.toString(),
       soyad: json['soyad']?.toString(),
       eposta: json['eposta_adresi']?.toString(),
       tel: json['tel_no']?.toString(),
       fotoYolu: json['foto_yolu']?.toString(),
-      kiloKg: MemberProfile._asDouble(json['kilo_kg']),
-      boyCm: MemberProfile._asDouble(json['boy_cm']),
-      belCevresi: MemberProfile._asDouble(json['bel_cevresi']),
-      basenCevresi: MemberProfile._asDouble(json['basen_cevresi']),
-      boyunCevresi: MemberProfile._asDouble(json['boyun_cevresi']),
-      yagOrani: MemberProfile._asDouble(json['yag_orani']),
-      vki: MemberProfile._asDouble(json['vucut_kitle_indeksi']),
+      kiloKg: MemberProfile(id: 0)._asDouble(json['kilo_kg']),
+      boyCm: MemberProfile(id: 0)._asDouble(json['boy_cm']),
+      belCevresi: MemberProfile(id: 0)._asDouble(json['bel_cevresi']),
+      basenCevresi: MemberProfile(id: 0)._asDouble(json['basen_cevresi']),
+      boyunCevresi: MemberProfile(id: 0)._asDouble(json['boyun_cevresi']),
+      yagOrani: MemberProfile(id: 0)._asDouble(json['yag_orani']),
+      vki: MemberProfile(id: 0)._asDouble(json['vucut_kitle_indeksi']),
       vkiDurum: json['vki_durum']?.toString(),
       cinsiyet: json['cinsiyet']?.toString(),
       dogumTarihi: json['dogum_tarihi']?.toString(),
@@ -149,22 +149,14 @@ class ProfileMeResponse {
   });
 
   factory ProfileMeResponse.fromJson(Map<String, dynamic> json) {
-    final profileRaw = json['profile'];
-    if (profileRaw is! Map) throw Exception('profile verisi eksik veya geçersiz');
-    final profile = MemberProfile.fromJson(Map<String, dynamic>.from(profileRaw));
-
-    final subRaw = json['subscription'];
-    final subscription = (subRaw is Map) ? Map<String, dynamic>.from(subRaw) : <String, dynamic>{};
-
+    final profile = MemberProfile.fromJson(json['profile'] as Map<String, dynamic>);
+    final subscription = (json['subscription'] as Map<String, dynamic>? ?? {});
     final targetsJson = json['targets'];
-    final targets = (targetsJson is Map)
-        ? Targets.fromJson(Map<String, dynamic>.from(targetsJson))
-        : null;
 
     return ProfileMeResponse(
       profile: profile,
       subscription: subscription,
-      targets: targets,
+      targets: targetsJson == null ? null : Targets.fromJson(targetsJson as Map<String, dynamic>),
     );
   }
 }

@@ -18,6 +18,7 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
   late final BeslenmeApi _besApi;
 
   bool _loading = true;
+  bool _toggling = false;
   String? _error;
 
   String _tarih = _today();
@@ -118,9 +119,8 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
             mapped[meal] = list;
           }
         }
-      } catch (e) {
-        // ignore: avoid_print
-        print('Günlük tick verisi alınamadı: $e');
+      } catch (_) {
+        // Tick verisi gelmezse ekran çalışmaya devam etsin.
       }
 
       double? targetKcal;
@@ -141,9 +141,8 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
           targetKarb = t['karb_g'] != null ? _toDouble(t['karb_g']) : null;
           targetYag = t['yag_g'] != null ? _toDouble(t['yag_g']) : null;
         }
-      } catch (e) {
-        // ignore: avoid_print
-        print('Beslenme hedefleri alınamadı: $e');
+      } catch (_) {
+        // Hedefler gelmezse de ekran çalışsın.
       }
 
       if (!mounted) return;
@@ -228,6 +227,14 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
     return int.tryParse(s);
   }
 
+  double? _tryDouble(dynamic v) {
+  if (v == null) return null;
+  if (v is num) return v.toDouble();
+  final s = v.toString().replaceAll(',', '.').trim();
+  if (s.isEmpty) return null;
+  return double.tryParse(s);
+}
+
   bool _isConsumedInMeal(int mealNo, Map<String, dynamic> planItem) {
     final planBesinId = _tryInt(planItem['besin_id'] ?? planItem['besinId']);
     if (planBesinId != null && planBesinId > 0) {
@@ -256,6 +263,8 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
 
     return false;
   }
+
+ 
 
   int _mealKeyToNo(String raw) {
     final s = _norm(raw).replaceAll(' ', '');
@@ -288,6 +297,148 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
         return 'Öğün';
     }
   }
+
+  int? _extractPlanBesinId(Map<String, dynamic> item) {
+  return _tryInt(item['besin_id'] ?? item['besinId']);
+}
+
+int? _extractPlanPorsiyonId(Map<String, dynamic> item) {
+  return _tryInt(
+    item['porsiyon_id'] ??
+        item['porsiyonId'] ??
+        item['default_porsiyon_id'] ??
+        item['defaultPorsiyonId'],
+  );
+}
+
+double? _extractPlanGram(Map<String, dynamic> item) {
+  final miktar = _tryDouble(item['miktar']);
+  final birim = (item['birim'] ?? '').toString().toLowerCase().trim();
+
+  if (miktar == null || miktar <= 0) return null;
+
+  if (birim.contains('gr') || birim == 'g' || birim.contains('gram')) {
+    return miktar;
+  }
+
+  return null;
+}
+
+double _extractPlanAdet(Map<String, dynamic> item) {
+  final adet = _tryDouble(item['adet']);
+  if (adet != null && adet > 0) return adet;
+
+  final miktar = _tryDouble(item['miktar']);
+  final birim = (item['birim'] ?? '').toString().toLowerCase().trim();
+
+  if (miktar != null && miktar > 0) {
+    if (birim.contains('adet')) return miktar;
+    if (birim.contains('porsiyon')) return miktar;
+  }
+
+  return 1;
+}
+
+Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
+  if (_toggling) return;
+
+  final consumed = _isConsumedInMeal(mealNo, planItem);
+
+  final besinId = _extractPlanBesinId(planItem);
+  if (besinId == null || besinId <= 0) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('besin_id yok')),
+    );
+    return;
+  }
+
+  final oldState = <int, List<Map<String, dynamic>>>{};
+  for (final entry in _itemsByMeal.entries) {
+    oldState[entry.key] = entry.value
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
+  }
+
+  final porsiyonId = _extractPlanPorsiyonId(planItem);
+  final gram = _extractPlanGram(planItem);
+  final adet = _extractPlanAdet(planItem);
+
+  setState(() {
+    _toggling = true;
+
+    if (consumed) {
+      _itemsByMeal[mealNo]?.removeWhere((e) {
+        return _tryInt(e['besin_id']) == besinId;
+      });
+    } else {
+      _itemsByMeal[mealNo] ??= [];
+      _itemsByMeal[mealNo]!.add({
+        'id': -DateTime.now().millisecondsSinceEpoch,
+        'besin_id': besinId,
+        'besin_ad': (planItem['yemek'] ?? '').toString(),
+        'kalori': _tryDouble(planItem['kalori']) ?? 0,
+        'protein': _tryDouble(planItem['protein']) ?? 0,
+        'karbonhidrat': _tryDouble(planItem['karbonhidrat']) ?? 0,
+        'yag': _tryDouble(planItem['yag']) ?? 0,
+      });
+    }
+  });
+
+  try {
+    if (consumed) {
+      await _besApi.gunlukSil(
+        tarih: _tarih,
+        meal: mealNo,
+        besinId: besinId,
+      );
+    } else {
+      final res = await _besApi.gunlukEkle(
+        tarih: _tarih,
+        meal: mealNo,
+        besinId: besinId,
+        porsiyonId: porsiyonId,
+        adet: adet,
+        gram: gram,
+        besinAd: (planItem['yemek'] ?? planItem['ad'] ?? '').toString(),
+        kalori: _tryDouble(planItem['kalori']),
+        protein: _tryDouble(planItem['protein']),
+        karbonhidrat: _tryDouble(planItem['karbonhidrat']),
+        yag: _tryDouble(planItem['yag']),
+      );
+
+      final realOgeId = _tryInt(res['oge_id']);
+      if (realOgeId != null && realOgeId > 0) {
+        final list = _itemsByMeal[mealNo] ?? [];
+        for (var i = 0; i < list.length; i++) {
+          final it = list[i];
+          if (_tryInt(it['besin_id']) == besinId && (_tryInt(it['id']) ?? 0) < 0) {
+            list[i] = {
+              ...it,
+              'id': realOgeId,
+            };
+            break;
+          }
+        }
+      }
+    }
+  } catch (e) {
+    if (!mounted) return;
+
+    setState(() {
+      _itemsByMeal = oldState;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('İşlem yapılamadı: $e')),
+    );
+  } finally {
+    if (mounted) {
+      setState(() {
+        _toggling = false;
+      });
+    }
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -357,25 +508,43 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
         children: [
           const _NutritionBrightBackground(),
           SafeArea(
-            child: RefreshIndicator(
-              onRefresh: _load,
-              child: _NutritionPremiumView(
-                tarih: _tarih,
-                onPickDate: _pickDate,
-                onRefresh: _load,
-                planData: planData,
-                targetKcal: _targetKcal,
-                targetProtein: _targetProtein,
-                targetKarb: _targetKarb,
-                targetYag: _targetYag,
-                toplamKalori: _toplamKalori,
-                toplamProtein: _toplamProtein,
-                toplamKarb: _toplamKarb,
-                toplamYag: _toplamYag,
-                mealKeyToNo: _mealKeyToNo,
-                mealTitle: _mealTitle,
-                isConsumedInMeal: _isConsumedInMeal,
-              ),
+            child: Stack(
+              children: [
+                RefreshIndicator(
+                  onRefresh: _load,
+                  child: _NutritionPremiumView(
+                    tarih: _tarih,
+                    onPickDate: _pickDate,
+                    onRefresh: _load,
+                    planData: planData,
+                    targetKcal: _targetKcal,
+                    targetProtein: _targetProtein,
+                    targetKarb: _targetKarb,
+                    targetYag: _targetYag,
+                    toplamKalori: _toplamKalori,
+                    toplamProtein: _toplamProtein,
+                    toplamKarb: _toplamKarb,
+                    toplamYag: _toplamYag,
+                    mealKeyToNo: _mealKeyToNo,
+                    mealTitle: _mealTitle,
+                    isConsumedInMeal: _isConsumedInMeal,
+                    onToggleConsumed: _toggleConsumed,
+                  ),
+                ),
+                if (_toggling)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: Container(
+                        color: Colors.black.withOpacity(0.04),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF4F7CFF),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ],
@@ -403,6 +572,8 @@ class _NutritionPremiumView extends StatelessWidget {
   final int Function(String) mealKeyToNo;
   final String Function(int) mealTitle;
   final bool Function(int mealNo, Map<String, dynamic> planItem) isConsumedInMeal;
+  final Future<void> Function(int mealNo, Map<String, dynamic> planItem)
+      onToggleConsumed;
 
   const _NutritionPremiumView({
     required this.tarih,
@@ -420,6 +591,7 @@ class _NutritionPremiumView extends StatelessWidget {
     required this.mealKeyToNo,
     required this.mealTitle,
     required this.isConsumedInMeal,
+    required this.onToggleConsumed,
   });
 
   static String _s(dynamic v, [String fallback = '']) {
@@ -445,7 +617,7 @@ class _NutritionPremiumView extends StatelessWidget {
 
     final hedef = _s(program['hedef']);
     final notlar = _s(program['notlar']);
-    final createdAt = _s(planData['created_at']);
+    final createdAt = _s(planData['created_at'] ?? program['created_at']);
 
     final byOgunRaw = planData['by_ogun'];
     final byOgun = (byOgunRaw is Map)
@@ -567,6 +739,7 @@ class _NutritionPremiumView extends StatelessWidget {
               items: items,
               mealNo: mealNo,
               isConsumedInMeal: isConsumedInMeal,
+              onToggleConsumed: onToggleConsumed,
             );
           }),
       ],
@@ -911,73 +1084,103 @@ class _MainKcalCard extends StatelessWidget {
 
     return _PremiumCardSurface(
       padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Günlük Kalori',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF111827),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: consumed),
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeOutCubic,
+        builder: (context, animatedConsumed, _) {
+          final animatedProgress = _pct(animatedConsumed, target);
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _fmt0(consumed),
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  height: 1,
-                  letterSpacing: -0.8,
+                'Günlük Kalori',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
                   color: const Color(0xFF111827),
                 ),
               ),
-              const SizedBox(width: 6),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  'kcal',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF667085),
+              const SizedBox(height: 12),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    transitionBuilder: (child, animation) => FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0, 0.15),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      ),
+                    ),
+                    child: Text(
+                      _fmt0(animatedConsumed),
+                      key: ValueKey(_fmt0(animatedConsumed)),
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                        height: 1,
+                        letterSpacing: -0.8,
+                        color: const Color(0xFF111827),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 6),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      'kcal',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF667085),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    target != null && target! > 0
+                        ? '${_fmt0(animatedConsumed)} / ${_fmt0(target!)} kcal'
+                        : '${_fmt0(animatedConsumed)} kcal',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: const Color(0xFF667085),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
-              const Spacer(),
+              const SizedBox(height: 14),
+              TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: animatedProgress),
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeOutCubic,
+                builder: (context, value, _) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: LinearProgressIndicator(
+                      value: value,
+                      minHeight: 12,
+                      backgroundColor: const Color(0xFFEEF3FB),
+                      color: const Color(0xFF4F7CFF),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
               Text(
                 target != null && target! > 0
-                    ? '${_fmt0(consumed)} / ${_fmt0(target!)} kcal'
-                    : '${_fmt0(consumed)} kcal',
-                style: theme.textTheme.bodyMedium?.copyWith(
+                    ? 'Hedefin ${(progress * 100).toStringAsFixed(0)}% tamamlandı'
+                    : 'Profil hedefi tanımlı değil',
+                style: theme.textTheme.bodySmall?.copyWith(
                   color: const Color(0xFF667085),
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 14),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 12,
-              backgroundColor: const Color(0xFFEEF3FB),
-              color: const Color(0xFF4F7CFF),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            target != null && target! > 0
-                ? 'Hedefin ${(progress * 100).toStringAsFixed(0)}% tamamlandı'
-                : 'Profil hedefi tanımlı değil',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: const Color(0xFF667085),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -1008,85 +1211,114 @@ class _MacroMiniCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final progress = _pct(value, target);
 
     return _PremiumCardSurface(
       padding: const EdgeInsets.all(14),
-      child: SizedBox(
-        height: 104,
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 56 * progress,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: const Color(0xFF4F7CFF).withOpacity(0.08),
-                ),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: value),
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeOutCubic,
+        builder: (context, animatedValue, _) {
+          final progress = _pct(animatedValue, target);
+
+          return SizedBox(
+            height: 104,
+            child: Stack(
               children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: const Color(0xFF4F7CFF).withOpacity(0.10),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0, end: progress),
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, p, _) {
+                      return Container(
+                        height: 56 * p,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: const Color(0xFF4F7CFF).withOpacity(0.08),
+                        ),
+                      );
+                    },
                   ),
-                  child: Icon(icon, size: 18, color: const Color(0xFF4F7CFF)),
                 ),
-                const Spacer(),
-                Text(
-                  title,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF667085),
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: const Color(0xFF4F7CFF).withOpacity(0.10),
+                      ),
+                      child: Icon(icon, size: 18, color: const Color(0xFF4F7CFF)),
+                    ),
+                    const Spacer(),
                     Text(
-                      _fmt0(value),
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        height: 1,
-                        color: const Color(0xFF111827),
+                      title,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: const Color(0xFF667085),
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: Text(
-                        unit,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: const Color(0xFF667085),
-                          fontWeight: FontWeight.w800,
+                    const SizedBox(height: 4),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          transitionBuilder: (child, animation) => FadeTransition(
+                            opacity: animation,
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0, 0.15),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            ),
+                          ),
+                          child: Text(
+                            _fmt0(animatedValue),
+                            key: ValueKey('${title}_${_fmt0(animatedValue)}'),
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w900,
+                              height: 1,
+                              color: const Color(0xFF111827),
+                            ),
+                          ),
                         ),
+                        const SizedBox(width: 4),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: Text(
+                            unit,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: const Color(0xFF667085),
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      target != null && target! > 0
+                          ? '${_fmt0(target!)} $unit hedef'
+                          : 'Hedef yok',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: const Color(0xFF667085),
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  target != null && target! > 0
-                      ? '${_fmt0(target!)} $unit hedef'
-                      : 'Hedef yok',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF667085),
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -1100,6 +1332,8 @@ class _MealSectionCard extends StatelessWidget {
   final List<dynamic> items;
   final int mealNo;
   final bool Function(int mealNo, Map<String, dynamic> planItem) isConsumedInMeal;
+  final Future<void> Function(int mealNo, Map<String, dynamic> planItem)
+      onToggleConsumed;
 
   const _MealSectionCard({
     required this.title,
@@ -1109,6 +1343,7 @@ class _MealSectionCard extends StatelessWidget {
     required this.items,
     required this.mealNo,
     required this.isConsumedInMeal,
+    required this.onToggleConsumed,
   });
 
   static String _s(dynamic v, [String fallback = '']) {
@@ -1128,7 +1363,8 @@ class _MealSectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final progress = totalCount <= 0 ? 0.0 : (doneCount / totalCount).clamp(0.0, 1.0);
+    final progress =
+        totalCount <= 0 ? 0.0 : (doneCount / totalCount).clamp(0.0, 1.0);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
@@ -1236,83 +1472,88 @@ class _MealSectionCard extends StatelessWidget {
               final itemKcal = _d(m['kalori']);
               final done = isConsumedInMeal(mealNo, m);
 
-              return Container(
-                margin: const EdgeInsets.only(top: 10),
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: done
-                      ? const Color(0xFF4F7CFF).withOpacity(0.07)
-                      : const Color(0xFFFBFDFF),
-                  border: Border.all(
+              return GestureDetector(
+                onTap: () => onToggleConsumed(mealNo, m),
+                child: Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
                     color: done
-                        ? const Color(0xFF4F7CFF).withOpacity(0.18)
-                        : const Color(0xFFE8EEF7),
+                        ? const Color(0xFF4F7CFF).withOpacity(0.07)
+                        : const Color(0xFFFBFDFF),
+                    border: Border.all(
+                      color: done
+                          ? const Color(0xFF4F7CFF).withOpacity(0.18)
+                          : const Color(0xFFE8EEF7),
+                    ),
                   ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 34,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: done
-                            ? const Color(0xFF4F7CFF).withOpacity(0.12)
-                            : Colors.white,
-                      ),
-                      child: Icon(
-                        done
-                            ? Icons.check_rounded
-                            : Icons.radio_button_unchecked_rounded,
-                        size: 18,
-                        color: done
-                            ? const Color(0xFF4F7CFF)
-                            : const Color(0xFFB0BAC9),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            yemek,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w800,
-                              color: const Color(0xFF111827),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${miktar.toStringAsFixed(miktar % 1 == 0 ? 0 : 1)} ${birim.isEmpty ? '' : birim}',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: const Color(0xFF667085),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: Colors.white,
-                        border: Border.all(color: const Color(0xFFE8EEF7)),
-                      ),
-                      child: Text(
-                        '${_fmt0(itemKcal)} kcal',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF111827),
-                          fontSize: 12.5,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 34,
+                        height: 34,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: done
+                              ? const Color(0xFF4F7CFF).withOpacity(0.12)
+                              : Colors.white,
+                        ),
+                        child: Icon(
+                          done
+                              ? Icons.check_rounded
+                              : Icons.radio_button_unchecked_rounded,
+                          size: 18,
+                          color: done
+                              ? const Color(0xFF4F7CFF)
+                              : const Color(0xFFB0BAC9),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              yemek,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFF111827),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${miktar.toStringAsFixed(miktar % 1 == 0 ? 0 : 1)} ${birim.isEmpty ? '' : birim}',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: const Color(0xFF667085),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.white,
+                          border: Border.all(color: const Color(0xFFE8EEF7)),
+                        ),
+                        child: Text(
+                          '${_fmt0(itemKcal)} kcal',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF111827),
+                            fontSize: 12.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }).toList(),

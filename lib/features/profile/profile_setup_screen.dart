@@ -110,13 +110,11 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   bool _needBasen() => _cinsiyet == 'kadin';
 
   Future<void> _save() async {
-    if (_saving) return;
-
     FocusScope.of(context).unfocus();
 
     setState(() => _error = null);
 
-    if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (!_formKey.currentState!.validate()) return;
 
     if (_cinsiyet == null) {
       setState(() => _error = 'Cinsiyet seçiniz.');
@@ -451,7 +449,7 @@ class _NiceDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      initialValue: value,
+      value: value,
       items: items,
       onChanged: onChanged,
       validator: validator,

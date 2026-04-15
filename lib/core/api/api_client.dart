@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import '../storage/token_storage.dart';
 import 'auth_events.dart';
 
@@ -24,18 +23,16 @@ class ApiClient {
       headers: {'Accept': 'application/json'},
     );
 
-    if (kDebugMode) {
-      dio.interceptors.add(
-        LogInterceptor(
-          request: true,
-          requestHeader: false,
-          requestBody: false, // şifre gibi hassas veriler loglanmasın
-          responseHeader: false,
-          responseBody: true,
-          error: true,
-        ),
-      );
-    }
+    dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true,
+        error: true,
+      ),
+    );
 
     dio.interceptors.add(
       InterceptorsWrapper(

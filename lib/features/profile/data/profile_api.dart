@@ -7,28 +7,19 @@ class ProfileApi {
 
   Future<ProfileMeResponse> me() async {
     final res = await dio.get('/profile/me.php');
-    final raw = res.data;
-    final data = (raw is Map) ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
-    if (data['success'] != true && data['ok'] != true) {
-      throw Exception(
-        data['message']?.toString() ?? data['msg']?.toString() ?? 'Profil alınamadı',
-      );
+    final data = res.data as Map<String, dynamic>;
+    if (data['success'] != true) {
+      throw Exception(data['message']?.toString() ?? 'Profil alınamadı');
     }
-    final inner = data['data'];
-    if (inner is! Map) throw Exception('Profil verisi alınamadı');
-    return ProfileMeResponse.fromJson(Map<String, dynamic>.from(inner));
+    return ProfileMeResponse.fromJson(data['data'] as Map<String, dynamic>);
   }
 
   Future<Map<String, dynamic>> update(Map<String, dynamic> payload) async {
     final res = await dio.post('/profile/update.php', data: payload);
-    final raw = res.data;
-    final data = (raw is Map) ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
-    if (data['success'] != true && data['ok'] != true) {
-      throw Exception(
-        data['message']?.toString() ?? data['msg']?.toString() ?? 'Profil güncellenemedi',
-      );
+    final data = res.data as Map<String, dynamic>;
+    if (data['success'] != true) {
+      throw Exception(data['message']?.toString() ?? 'Profil güncellenemedi');
     }
-    final inner = data['data'];
-    return (inner is Map) ? Map<String, dynamic>.from(inner) : <String, dynamic>{};
+    return data['data'] as Map<String, dynamic>;
   }
 }

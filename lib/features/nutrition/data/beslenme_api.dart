@@ -5,14 +5,78 @@ class BeslenmeApi {
 
   BeslenmeApi({required this.apiClient});
 
-  /// GET /beslenme/gunluk_get.php?tarih=YYYY-MM-DD
-  /// Amaç:
-  /// Eğitmenin tanımladığı plan öğelerinden hangilerinin
-  /// kullanıcı tarafından tüketilmiş / işaretlenmiş olduğunu almak.
   Future<Map<String, dynamic>> gunlukGet({String? tarih}) async {
     return apiClient.getMap(
       '/beslenme/gunluk_get.php',
       queryParameters: tarih != null ? {'tarih': tarih} : null,
     );
+  }
+
+  Future<Map<String, dynamic>> gunlukEkle({
+    required String tarih,
+    required int meal,
+    required int besinId,
+    int? porsiyonId,
+    double? adet,
+    double? gram,
+    String? besinAd,
+    double? kalori,
+    double? protein,
+    double? karbonhidrat,
+    double? yag,
+  }) async {
+    final res = await apiClient.dio.post(
+      '/beslenme/gunluk_ekle.php',
+      data: {
+        'tarih': tarih,
+        'meal': meal,
+        'besin_id': besinId,
+        if (porsiyonId != null && porsiyonId > 0) 'porsiyon_id': porsiyonId,
+        if (adet != null) 'adet': adet,
+        if (gram != null) 'gram': gram,
+        if (besinAd != null) 'besin_ad': besinAd,
+        if (kalori != null) 'kalori': kalori,
+        if (protein != null) 'protein': protein,
+        if (karbonhidrat != null) 'karbonhidrat': karbonhidrat,
+        if (yag != null) 'yag': yag,
+      },
+    );
+
+    final raw = res.data;
+    if (raw is Map) {
+      final map = Map<String, dynamic>.from(raw);
+      if (map['data'] is Map) {
+        return Map<String, dynamic>.from(map['data']);
+      }
+      return map;
+    }
+    return <String, dynamic>{};
+  }
+
+  Future<Map<String, dynamic>> gunlukSil({
+    int? ogeId,
+    String? tarih,
+    int? meal,
+    int? besinId,
+  }) async {
+    final res = await apiClient.dio.post(
+      '/beslenme/gunluk_sil.php',
+      data: {
+        if (ogeId != null && ogeId > 0) 'oge_id': ogeId,
+        if (tarih != null) 'tarih': tarih,
+        if (meal != null) 'meal': meal,
+        if (besinId != null) 'besin_id': besinId,
+      },
+    );
+
+    final raw = res.data;
+    if (raw is Map) {
+      final map = Map<String, dynamic>.from(raw);
+      if (map['data'] is Map) {
+        return Map<String, dynamic>.from(map['data']);
+      }
+      return map;
+    }
+    return <String, dynamic>{};
   }
 }
