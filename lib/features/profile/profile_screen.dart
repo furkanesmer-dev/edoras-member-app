@@ -839,9 +839,9 @@ class _AvatarButtonLarge extends StatelessWidget {
                           ),
                         );
                       },
-                      errorBuilder: (_, __, ___) => _fallbackAvatar(),
+                      errorBuilder: (ctx, __, ___) => _fallbackAvatar(ctx),
                     )
-                  : _fallbackAvatar(),
+                  : _fallbackAvatar(context),
             ),
           ),
           Positioned(
@@ -890,14 +890,15 @@ class _AvatarButtonLarge extends StatelessWidget {
     );
   }
 
-  Widget _fallbackAvatar() {
+  Widget _fallbackAvatar(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: const Color(0xFFF3F7FD),
+      color: isDark ? AppColors.darkSurface2 : const Color(0xFFF3F7FD),
       alignment: Alignment.center,
-      child: const Icon(
+      child: Icon(
         Icons.person_rounded,
         size: 46,
-        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
+        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
       ),
     );
   }
