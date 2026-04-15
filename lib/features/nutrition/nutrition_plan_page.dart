@@ -1005,7 +1005,7 @@ class _SoftActionButton extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w800,
                 color: isDark ? AppColors.darkText : AppColors.lightText,
               ),
@@ -1045,7 +1045,7 @@ class _MetaChip extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 color: isDark ? AppColors.darkText : AppColors.lightText,
                 fontWeight: FontWeight.w700,
               ),
@@ -1544,7 +1544,7 @@ class _MealSectionCard extends StatelessWidget {
                         ),
                         child: Text(
                           '${_fmt0(itemKcal)} kcal',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w800,
                             color: isDark ? AppColors.darkText : AppColors.lightText,
                             fontSize: 12.5,
