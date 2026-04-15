@@ -472,7 +472,7 @@ class _ExerciseCard extends StatelessWidget {
         context: context,
         builder: (_) => Dialog(
           insetPadding: const EdgeInsets.all(16),
-          backgroundColor: Colors.white,
+          backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
@@ -524,9 +524,9 @@ class _ExerciseCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFDFF),
+            color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: const Color(0xFFE8EEF7)),
+            border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
           ),
           child: Row(
             children: [
@@ -651,9 +651,9 @@ class _WorkoutErrorView extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 460),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkSurface : Colors.white,
                 borderRadius: BorderRadius.circular(26),
-                border: Border.all(color: const Color(0xFFE7ECF3)),
+                border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE7ECF3)),
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0x0A101828),
@@ -737,9 +737,9 @@ class _WorkoutEmptyState extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: const Color(0xFFE7ECF3)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE7ECF3)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0A101828),
@@ -815,9 +815,9 @@ class _ArchiveEntryCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? AppColors.darkSurface : Colors.white,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFE7ECF3)),
+            border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE7ECF3)),
             boxShadow: const [
               BoxShadow(
                 color: Color(0x0A101828),
@@ -897,16 +897,8 @@ class _WorkoutHeroCard extends StatelessWidget {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFFFFF),
-            Color(0xFFF8FBFF),
-            Color(0xFFF2F7FF),
-          ],
-        ),
-        border: Border.all(color: const Color(0xFFDDE8F7)),
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFDDE8F7)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0D101828),
