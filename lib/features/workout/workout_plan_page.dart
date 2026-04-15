@@ -545,14 +545,14 @@ class _ExerciseCard extends StatelessWidget {
                   border: Border.all(color: const Color(0xFFDCE7FB)),
                 ),
                 child: gif == null
-                    ? const Icon(
+                    ? Icon(
                         Icons.image_not_supported_rounded,
                         color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       )
                     : Image.network(
                         gif,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const Icon(
+                        errorBuilder: (_, __, ___) => Icon(
                           Icons.broken_image_outlined,
                           color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         ),
