@@ -112,17 +112,25 @@ class _BottomBar extends StatelessWidget {
               height: 68,
               decoration: BoxDecoration(
                 color: isDark
-                    ? AppColors.darkSurface.withOpacity(0.88)
+                    ? AppColors.darkSurface2.withOpacity(0.95)
                     : Colors.white.withOpacity(0.92),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
-                  color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  color: isDark
+                      ? AppColors.primary.withOpacity(0.20)
+                      : AppColors.lightBorder,
                   width: 1,
                 ),
                 boxShadow: [
+                  if (isDark)
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.12),
+                      blurRadius: 20,
+                      offset: const Offset(0, 0),
+                    ),
                   BoxShadow(
                     color: isDark
-                        ? Colors.black.withOpacity(0.40)
+                        ? Colors.black.withOpacity(0.55)
                         : Colors.black.withOpacity(0.08),
                     blurRadius: 30,
                     offset: const Offset(0, 10),

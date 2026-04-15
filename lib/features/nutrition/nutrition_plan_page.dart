@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:edoras_member_app/core/theme/app_colors.dart';
 import 'package:edoras_member_app/core/api/api_client.dart';
 import 'package:edoras_member_app/features/nutrition/data/beslenme_api.dart';
 
@@ -752,19 +753,10 @@ class _NutritionBrightBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return IgnorePointer(
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFDFEFF),
-              Color(0xFFF7FAFF),
-              Color(0xFFF9FCFF),
-            ],
-          ),
-        ),
+        color: isDark ? AppColors.darkBg : const Color(0xFFF7FAFF),
         child: Stack(
           children: [
             Positioned(
@@ -775,7 +767,7 @@ class _NutritionBrightBackground extends StatelessWidget {
                 height: 220,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withOpacity(0.12),
+                  color: AppColors.primary.withOpacity(isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -787,7 +779,7 @@ class _NutritionBrightBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF00C48C).withOpacity(0.08),
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -799,7 +791,7 @@ class _NutritionBrightBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFFFB074).withOpacity(0.10),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -821,13 +813,14 @@ class _NutritionTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Expanded(
           child: Text(
             title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.5,
                 ),
@@ -860,6 +853,7 @@ class _TopBannerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
 
     return _PremiumCardSurface(
@@ -892,14 +886,14 @@ class _TopBannerCard extends StatelessWidget {
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w900,
                         letterSpacing: -0.2,
-                        color: const Color(0xFF111827),
+                        color: isDark ? AppColors.darkText : AppColors.lightText,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Günlük planını ve tüketim durumunu takip et',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -942,9 +936,9 @@ class _TopBannerCard extends StatelessWidget {
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                color: const Color(0xFFFBFDFF),
+                color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
                 border: Border.all(
-                  color: const Color(0xFFE8EEF7),
+                  color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7),
                 ),
               ),
               child: Row(
@@ -962,7 +956,7 @@ class _TopBannerCard extends StatelessWidget {
                       style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.45,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF111827),
+                        color: isDark ? AppColors.darkText : AppColors.lightText,
                       ),
                     ),
                   ),
@@ -989,6 +983,7 @@ class _SoftActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
@@ -996,8 +991,8 @@ class _SoftActionButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: const Color(0xFFFBFDFF),
-          border: Border.all(color: const Color(0xFFE8EEF7)),
+          color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
+          border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -1012,7 +1007,7 @@ class _SoftActionButton extends StatelessWidget {
               label,
               style: const TextStyle(
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF111827),
+                color: isDark ? AppColors.darkText : AppColors.lightText,
               ),
             ),
           ],
@@ -1035,6 +1030,7 @@ class _MetaChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
@@ -1050,7 +1046,7 @@ class _MetaChip extends StatelessWidget {
             child: Text(
               text,
               style: const TextStyle(
-                color: Color(0xFF111827),
+                color: isDark ? AppColors.darkText : AppColors.lightText,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -1079,6 +1075,7 @@ class _MainKcalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
     final progress = _pct(consumed, target);
 
@@ -1098,7 +1095,7 @@ class _MainKcalCard extends StatelessWidget {
                 'Günlük Kalori',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                 ),
               ),
               const SizedBox(height: 12),
@@ -1124,7 +1121,7 @@ class _MainKcalCard extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                         height: 1,
                         letterSpacing: -0.8,
-                        color: const Color(0xFF111827),
+                        color: isDark ? AppColors.darkText : AppColors.lightText,
                       ),
                     ),
                   ),
@@ -1135,7 +1132,7 @@ class _MainKcalCard extends StatelessWidget {
                       'kcal',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF667085),
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       ),
                     ),
                   ),
@@ -1145,7 +1142,7 @@ class _MainKcalCard extends StatelessWidget {
                         ? '${_fmt0(animatedConsumed)} / ${_fmt0(target!)} kcal'
                         : '${_fmt0(animatedConsumed)} kcal',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -1162,7 +1159,7 @@ class _MainKcalCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: value,
                       minHeight: 12,
-                      backgroundColor: const Color(0xFFEEF3FB),
+                      backgroundColor: isDark ? AppColors.darkSurface2 : const Color(0xFFEEF3FB),
                       color: const Color(0xFF4F7CFF),
                     ),
                   );
@@ -1174,7 +1171,7 @@ class _MainKcalCard extends StatelessWidget {
                     ? 'Hedefin ${(progress * 100).toStringAsFixed(0)}% tamamlandı'
                     : 'Profil hedefi tanımlı değil',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -1210,6 +1207,7 @@ class _MacroMiniCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
 
     return _PremiumCardSurface(
@@ -1258,7 +1256,7 @@ class _MacroMiniCard extends StatelessWidget {
                     Text(
                       title,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -1284,7 +1282,7 @@ class _MacroMiniCard extends StatelessWidget {
                             style: theme.textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.w900,
                               height: 1,
-                              color: const Color(0xFF111827),
+                              color: isDark ? AppColors.darkText : AppColors.lightText,
                             ),
                           ),
                         ),
@@ -1294,7 +1292,7 @@ class _MacroMiniCard extends StatelessWidget {
                           child: Text(
                             unit,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF667085),
+                              color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
@@ -1309,7 +1307,7 @@ class _MacroMiniCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFF667085),
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -1362,6 +1360,7 @@ class _MealSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
     final progress =
         totalCount <= 0 ? 0.0 : (doneCount / totalCount).clamp(0.0, 1.0);
@@ -1406,7 +1405,7 @@ class _MealSectionCard extends StatelessWidget {
                     title,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF111827),
+                      color: isDark ? AppColors.darkText : AppColors.lightText,
                     ),
                   ),
                 ),
@@ -1430,7 +1429,7 @@ class _MealSectionCard extends StatelessWidget {
                       fontWeight: FontWeight.w800,
                       color: doneCount > 0
                           ? const Color(0xFF4F7CFF)
-                          : const Color(0xFF667085),
+                          : (isDark ? AppColors.darkTextSub : AppColors.lightTextSub),
                     ),
                   ),
                 ),
@@ -1444,7 +1443,7 @@ class _MealSectionCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -1454,7 +1453,7 @@ class _MealSectionCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: progress,
                       minHeight: 8,
-                      backgroundColor: const Color(0xFFEEF3FB),
+                      backgroundColor: isDark ? AppColors.darkSurface2 : const Color(0xFFEEF3FB),
                       color: const Color(0xFF4F7CFF),
                     ),
                   ),
@@ -1497,7 +1496,7 @@ class _MealSectionCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           color: done
                               ? const Color(0xFF4F7CFF).withOpacity(0.12)
-                              : Colors.white,
+                              : (isDark ? AppColors.darkSurface2 : Colors.white),
                         ),
                         child: Icon(
                           done
@@ -1518,14 +1517,14 @@ class _MealSectionCard extends StatelessWidget {
                               yemek,
                               style: theme.textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: const Color(0xFF111827),
+                                color: isDark ? AppColors.darkText : AppColors.lightText,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               '${miktar.toStringAsFixed(miktar % 1 == 0 ? 0 : 1)} ${birim.isEmpty ? '' : birim}',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: const Color(0xFF667085),
+                                color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -1540,14 +1539,14 @@ class _MealSectionCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
-                          color: Colors.white,
-                          border: Border.all(color: const Color(0xFFE8EEF7)),
+                          color: isDark ? AppColors.darkSurface2 : Colors.white,
+                          border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
                         ),
                         child: Text(
                           '${_fmt0(itemKcal)} kcal',
                           style: const TextStyle(
                             fontWeight: FontWeight.w800,
-                            color: Color(0xFF111827),
+                            color: isDark ? AppColors.darkText : AppColors.lightText,
                             fontSize: 12.5,
                           ),
                         ),
@@ -1569,6 +1568,7 @@ class _NoPlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
 
     return _PremiumCardSurface(
@@ -1594,7 +1594,7 @@ class _NoPlanCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w900,
-              color: const Color(0xFF111827),
+              color: isDark ? AppColors.darkText : AppColors.lightText,
             ),
           ),
           const SizedBox(height: 10),
@@ -1602,7 +1602,7 @@ class _NoPlanCard extends StatelessWidget {
             'Eğitmenin sana bir beslenme planı tanımladığında burada görüntülenecek.',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF667085),
+              color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
               height: 1.45,
               fontWeight: FontWeight.w600,
             ),
@@ -1618,12 +1618,13 @@ class _EmptyPlanContentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return _PremiumCardSurface(
       padding: const EdgeInsets.all(18),
       child: Text(
         'Bu plan için öğün içeriği bulunamadı.',
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF667085),
+              color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
               fontWeight: FontWeight.w700,
             ),
       ),
@@ -1642,6 +1643,7 @@ class _ErrorBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
 
     return Center(
@@ -1663,7 +1665,7 @@ class _ErrorBox extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w900,
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                 ),
               ),
               const SizedBox(height: 8),
@@ -1671,7 +1673,7 @@ class _ErrorBox extends StatelessWidget {
                 msg,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   height: 1.4,
                 ),
               ),
@@ -1716,6 +1718,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Container(
@@ -1735,7 +1738,7 @@ class _SectionHeader extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: const Color(0xFF111827),
+                      color: isDark ? AppColors.darkText : AppColors.lightText,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.2,
                     ),
@@ -1744,7 +1747,7 @@ class _SectionHeader extends StatelessWidget {
               Text(
                 subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF667085),
+                      color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                       fontWeight: FontWeight.w600,
                     ),
               ),
@@ -1800,30 +1803,26 @@ class _PremiumCardSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFFFFF),
-            Color(0xFFFCFDFF),
-          ],
-        ),
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         border: Border.all(
-          color: const Color(0xFFE8EEF7),
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
           width: 1.1,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF8DAEF5).withOpacity(0.12),
+            color: isDark
+                ? Colors.black.withOpacity(0.30)
+                : const Color(0xFF8DAEF5).withOpacity(0.10),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(isDark ? 0.15 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
