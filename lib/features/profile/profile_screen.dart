@@ -1501,12 +1501,13 @@ class _PremiumTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      style: const TextStyle(
-        color: Color(0xFF111827),
+      style: TextStyle(
+        color: isDark ? AppColors.darkText : AppColors.lightText,
         fontWeight: FontWeight.w700,
       ),
       decoration: InputDecoration(
@@ -1587,6 +1588,7 @@ class _DatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -1610,8 +1612,8 @@ class _DatePickerField extends StatelessWidget {
             Expanded(
               child: Text(
                 value,
-                style: const TextStyle(
-                  color: Color(0xFF111827),
+                style: TextStyle(
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w700,
                 ),
               ),
