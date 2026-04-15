@@ -1514,15 +1514,15 @@ class _PremiumTextField extends StatelessWidget {
         labelText: label,
         hintText: hint,
         filled: true,
-        fillColor: const Color(0xFFFBFDFF),
+        fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -1548,6 +1548,7 @@ class _PremiumDropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return DropdownButtonFormField<T>(
       value: value,
       items: items,
@@ -1556,15 +1557,15 @@ class _PremiumDropdownField<T> extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         filled: true,
-        fillColor: const Color(0xFFFBFDFF),
+        fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -1596,15 +1597,15 @@ class _DatePickerField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           filled: true,
-          fillColor: const Color(0xFFFBFDFF),
+          fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+            borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+            borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
           ),
         ),
         child: Row(
@@ -1700,12 +1701,13 @@ class _MetricTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         boxShadow: [
           BoxShadow(
             color: accent.withOpacity(0.08),
@@ -1724,7 +1726,7 @@ class _MetricTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w800,
                 ),
           ),
@@ -1734,7 +1736,7 @@ class _MetricTile extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.2,
                   height: 1.1,
@@ -1853,12 +1855,13 @@ class _MacroTargetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         boxShadow: [
           BoxShadow(
             color: accent.withOpacity(0.08),
@@ -1877,7 +1880,7 @@ class _MacroTargetTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w800,
                 ),
           ),
@@ -1890,7 +1893,7 @@ class _MacroTargetTile extends StatelessWidget {
                   value,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
+                        color: isDark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w900,
                         height: 1,
                         letterSpacing: -0.3,
@@ -1903,7 +1906,7 @@ class _MacroTargetTile extends StatelessWidget {
                 child: Text(
                   suffix,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -2117,12 +2120,13 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBFDFF),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
@@ -2145,7 +2149,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkTextSub : AppColors.lightTextSub,
+                        color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -2155,7 +2159,7 @@ class _InfoTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.darkText : AppColors.lightText,
+                        color: isDark ? AppColors.darkText : AppColors.lightText,
                         fontWeight: FontWeight.w800,
                       ),
                 ),

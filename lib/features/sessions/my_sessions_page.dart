@@ -1031,7 +1031,7 @@ class _SessionPremiumCard extends StatelessWidget {
           const SizedBox(height: 14),
           Container(
             height: 1,
-            color: const Color(0xFFE8EEF7),
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7),
           ),
           const SizedBox(height: 14),
           Row(
@@ -1089,9 +1089,9 @@ class _DetailChip extends StatelessWidget {
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface2 : Colors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
@@ -1267,9 +1267,9 @@ class _InfoTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBFDFF),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [

@@ -1480,11 +1480,11 @@ class _MealSectionCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18),
                     color: done
                         ? const Color(0xFF4F7CFF).withOpacity(0.07)
-                        : const Color(0xFFFBFDFF),
+                        : (isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF)),
                     border: Border.all(
                       color: done
                           ? const Color(0xFF4F7CFF).withOpacity(0.18)
-                          : const Color(0xFFE8EEF7),
+                          : (isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
                     ),
                   ),
                   child: Row(
