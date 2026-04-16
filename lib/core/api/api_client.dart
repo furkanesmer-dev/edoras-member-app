@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import '../storage/token_storage.dart';
 import 'auth_events.dart';
 
+// PROD: baseUrl artık burada değil; main.dart'tan enjekte edilir.
+
 class ApiClient {
   final Dio dio;
   final TokenStorage tokenStorage;
@@ -23,16 +25,18 @@ class ApiClient {
       headers: {'Accept': 'application/json'},
     );
 
-    dio.interceptors.add(
-      LogInterceptor(
-        request: true,
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-      ),
-    );
+    if (kDebugMode) {
+      dio.interceptors.add(
+        LogInterceptor(
+          request: true,
+          requestHeader: false,
+          requestBody: false, // şifre/token gibi hassas veriler loglanmasın
+          responseHeader: false,
+          responseBody: false, // prod güvenliği: response body loglanmıyor
+          error: true,
+        ),
+      );
+    }
 
     dio.interceptors.add(
       InterceptorsWrapper(
@@ -45,11 +49,6 @@ class ApiClient {
         },
         onError: (error, handler) async {
           final status = error.response?.statusCode;
-          final path = error.requestOptions.path;
-          final data = error.response?.data;
-
-          // ignore: avoid_print
-          print('API ERROR => $status $path\n$data');
 
           if (status == 401 || status == 403) {
             await tokenStorage.clear();
@@ -95,6 +94,15 @@ class ApiClient {
   }
 
   Map<String, dynamic> _extractDataAsMap(Response res) {
+    // Null response guard
+    if (res.data == null) {
+      throw DioException(
+        requestOptions: res.requestOptions,
+        error: 'Sunucu boş yanıt döndürdü (${res.requestOptions.path})',
+        type: DioExceptionType.badResponse,
+      );
+    }
+
     final json = _ensureMap(res.data);
     _throwIfApiNotOk(json, requestOptions: res.requestOptions);
 
@@ -104,7 +112,7 @@ class ApiClient {
 
     throw DioException(
       requestOptions: res.requestOptions,
-      error: 'Beklenmeyen response: data alanı yok veya Map değil',
+      error: 'Beklenmeyen response: data alanı yok veya Map değil (${data?.runtimeType})',
       type: DioExceptionType.badResponse,
     );
   }
@@ -162,6 +170,15 @@ class ApiClient {
       queryParameters: queryParameters,
     );
 
+    // Null response guard
+    if (res.data == null) {
+      throw DioException(
+        requestOptions: res.requestOptions,
+        error: 'Sunucu boş yanıt döndürdü ($path)',
+        type: DioExceptionType.badResponse,
+      );
+    }
+
     final json = _ensureMap(res.data);
     _throwIfApiNotOk(json, requestOptions: res.requestOptions);
 
@@ -169,9 +186,12 @@ class ApiClient {
     if (data is Map<String, dynamic>) return data;
     if (data is Map) return Map<String, dynamic>.from(data);
 
+    // data alanı yoksa ya da null ise boş Map döndür (bazı backend'ler sadece ok:true verir)
+    if (data == null) return <String, dynamic>{};
+
     throw DioException(
       requestOptions: res.requestOptions,
-      error: 'Beklenmeyen response: data alanı Map değil',
+      error: 'Beklenmeyen response: data alanı Map değil (${data.runtimeType})',
       type: DioExceptionType.badResponse,
     );
   }

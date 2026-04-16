@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  http: ^1.2.2
+  # http paketi kaldırıldı — uygulama yalnızca Dio kullanıyor.
   flutter_secure_storage: ^9.2.2
   dio: ^5.4.0
 

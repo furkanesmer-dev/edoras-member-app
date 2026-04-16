@@ -52,8 +52,16 @@ class _LoginScreenState extends State<LoginScreen> {
         data: {'login': login, 'password': pass},
       );
 
-      final data  = res.data;
-      final map   = (data is Map) ? Map<String, dynamic>.from(data) : <String, dynamic>{};
+      final data = res.data;
+      final map = (data is Map) ? Map<String, dynamic>.from(data) : <String, dynamic>{};
+
+      // Backend ok:false veya success:false ile hata mesajı dönebilir
+      final isOk = map['ok'] == true || map['success'] == true;
+      if (!isOk) {
+        final errMsg = (map['msg'] ?? map['message'] ?? map['error'])?.toString();
+        throw Exception(errMsg ?? 'Giriş başarısız. Bilgilerinizi kontrol edin.');
+      }
+
       final inner = (map['data'] is Map) ? Map<String, dynamic>.from(map['data']) : <String, dynamic>{};
 
       final token = (map['token'] ?? map['access_token'] ?? map['jwt'] ??
@@ -67,10 +75,25 @@ class _LoginScreenState extends State<LoginScreen> {
       if (widget.onLoggedIn != null) await widget.onLoggedIn!();
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = 'Giriş başarısız: $e');
+      // Kullanıcıya gösterilen mesaj — exception detayı (URL, path) gizleniyor.
+      final msg = _friendlyError(e);
+      setState(() => _error = msg);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  /// Exception'dan kullanıcı dostu mesaj çıkar; iç detayları gizler.
+  String _friendlyError(Object e) {
+    if (e is Exception) {
+      final s = e.toString().replaceFirst('Exception: ', '');
+      // DioException mesajları genellikle [DioException...] ile başlar
+      if (s.contains('DioException') || s.contains('SocketException')) {
+        return 'Bağlantı hatası. İnternet bağlantınızı kontrol edin.';
+      }
+      return s;
+    }
+    return 'Giriş yapılamadı. Lütfen tekrar deneyin.';
   }
 
   @override

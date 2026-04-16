@@ -6,7 +6,8 @@ plugins {
 }
 
 android {
-    namespace = "com.example.edoras_member_app"
+    // PROD: namespace ve applicationId güncellendi — artık com.example kullanılmıyor.
+    namespace = "com.edorasakademi.member"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,8 +21,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.edoras_member_app"
+        applicationId = "com.edorasakademi.member"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -32,8 +32,9 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // ⚠ PROD: Production'a çıkmadan önce gerçek bir keystore ile
+            // signingConfig tanımlanmalıdır. Şu an debug key kullanılıyor —
+            // Play Store yüklemesi için geçersizdir.
             signingConfig = signingConfigs.getByName("debug")
         }
     }

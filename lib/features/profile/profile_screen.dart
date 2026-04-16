@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:edoras_member_app/core/api/api_client.dart';
+import 'package:edoras_member_app/core/config/app_config.dart';
 import 'package:edoras_member_app/core/storage/token_storage.dart';
 import 'package:edoras_member_app/core/theme/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,7 +55,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _photoUploading = false;
   String? _photoUrl;
 
-  static const String _siteBase = 'https://kocluk.edorasakademi.com';
+  // PROD: site base URL, AppConfig.baseUrl üzerinden türetiliyor.
+  static String get _siteBase {
+    final base = AppConfig.baseUrl;
+    final uri = Uri.tryParse(base);
+    if (uri == null) return base;
+    return '${uri.scheme}://${uri.host}';
+  }
 
   @override
   void initState() {

@@ -5,15 +5,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:edoras_member_app/core/api/api_client.dart';
 import 'package:edoras_member_app/core/api/auth_events.dart';
+import 'package:edoras_member_app/core/config/app_config.dart';
 import 'package:edoras_member_app/core/storage/token_storage.dart';
 
-import 'package:edoras_member_app/core/theme/app_theme.dart'; // ✅ EKLENDİ
+import 'package:edoras_member_app/core/theme/app_theme.dart';
 
 import 'package:edoras_member_app/features/auth/auth_gate.dart';
 import 'package:edoras_member_app/features/register/register_screen.dart';
-import 'package:edoras_member_app/features/profile/profile_setup_screen.dart'; // ✅ route için gerekli
-
-const String baseUrl = 'https://kocluk.edorasakademi.com/api';
+import 'package:edoras_member_app/features/profile/profile_setup_screen.dart';
 
 void main() {
   runApp(EdorasApp());
@@ -29,7 +28,7 @@ class EdorasApp extends StatelessWidget {
     dio: Dio(),
     tokenStorage: tokenStorage,
     authEvents: authEvents,
-    baseUrl: baseUrl,
+    baseUrl: AppConfig.baseUrl,
   );
 
   @override
@@ -81,6 +80,7 @@ class _ProfileSetupRouteState extends State<_ProfileSetupRoute> {
   }
 
   Future<void> _loadMe() async {
+    if (!mounted) return;
     setState(() {
       _loading = true;
       _error = null;
@@ -89,13 +89,16 @@ class _ProfileSetupRouteState extends State<_ProfileSetupRoute> {
     try {
       final data = await widget.apiClient.getProfileMe();
       if (!mounted) return;
-      setState(() => _meData = data);
+      setState(() {
+        _meData = data;
+        _loading = false;
+      });
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = e.toString());
-    } finally {
-      if (!mounted) return;
-      setState(() => _loading = false);
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
     }
   }
 

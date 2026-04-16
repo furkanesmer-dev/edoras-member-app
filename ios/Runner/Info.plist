@@ -47,6 +47,8 @@
 		<true/>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Profil fotoğrafı seçmek için galeri erişimi gerekir.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Profil fotoğrafı galerinize kaydetmek için erişim gerekir.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>Profil fotoğrafı çekmek için kamera erişimi gerekir.</string>
 		<key>UIStatusBarHidden</key>
