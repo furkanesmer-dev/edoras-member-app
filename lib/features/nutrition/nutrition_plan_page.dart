@@ -161,7 +161,7 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = e.toString();
+        _error = "Bir hata oluştu. Lütfen tekrar deneyin.";
         _loading = false;
       });
     }
@@ -356,7 +356,7 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
   final besinId = _extractPlanBesinId(planItem);
   if (besinId == null || besinId <= 0) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('besin_id yok')),
+      const SnackBar(content: Text('Besin Bulunamadı')),
     );
     return;
   }

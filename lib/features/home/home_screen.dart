@@ -103,7 +103,7 @@ class HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = e.toString();
+        _error = "Bir hata oluştu. Lütfen tekrar deneyin.";
         _loading = false;
       });
     }

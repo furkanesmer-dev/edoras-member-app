@@ -2,7 +2,7 @@ name: edoras_member_app
 description: "Edoras Akademi üye uygulaması — antrenman, beslenme ve seans takibi."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
