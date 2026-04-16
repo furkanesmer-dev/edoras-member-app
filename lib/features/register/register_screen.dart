@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     } catch (e) {
       setState(() {
-        _error = e.toString().replaceFirst('Exception: ', '');
+        _error = 'Kayıt oluşturulamadı. Lütfen tekrar deneyin.';
       });
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -172,9 +172,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             padding: const EdgeInsets.all(12),
                             child: Image.asset(
-                              'assets/icons/edoras_logo_black_transparent_1024.png',
-                              fit: BoxFit.contain,
-                            ),
+  Theme.of(context).brightness == Brightness.dark
+      ? 'assets/icons/edoras_logo_white_transparent_1024.png'
+      : 'assets/icons/edoras_logo_black_transparent_1024.png',
+  fit: BoxFit.contain,
+),
                           ),
                         ),
 
