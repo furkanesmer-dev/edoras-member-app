@@ -110,7 +110,17 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Map<String, dynamic> _extractDataMap(dynamic raw) {
+    if (raw == null) return <String, dynamic>{};
     final map = (raw is Map) ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
+
+    // Backend ok:false / success:false ile 200 dönerse boş map ile devam et;
+    // 401/403 ise Dio interceptor zaten yakalar.
+    final hasStatusField = map.containsKey('ok') || map.containsKey('success');
+    if (hasStatusField) {
+      final isOk = map['ok'] == true || map['success'] == true;
+      if (!isOk) return <String, dynamic>{};
+    }
+
     final inner = (map['data'] is Map) ? Map<String, dynamic>.from(map['data']) : <String, dynamic>{};
     return inner.isNotEmpty ? inner : map;
   }

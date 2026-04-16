@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:edoras_member_app/core/api/api_client.dart';
@@ -7,8 +8,6 @@ import 'package:edoras_member_app/core/storage/token_storage.dart';
 
 import 'package:edoras_member_app/features/login/login_screen.dart';
 import 'package:edoras_member_app/features/shell/main_shell.dart';
-
-// ✅ KRİTİK: relative yerine package import (sınıf kesin görünür)
 import 'package:edoras_member_app/features/profile/profile_setup_screen.dart';
 
 class AuthGate extends StatefulWidget {
@@ -43,6 +42,9 @@ class _AuthGateState extends State<AuthGate> {
     super.initState();
 
     _sub = widget.authEvents.onUnauthorized.listen((_) async {
+      // Guard: Birden fazla 401 yanıtı (örn. home_screen Future.wait) tekrar tetikleyebilir.
+      // Zaten logout olunmuşsa işlem yapma.
+      if (!_loggedIn) return;
       await widget.tokenStorage.clear();
       if (!mounted) return;
       setState(() {
@@ -102,17 +104,50 @@ class _AuthGateState extends State<AuthGate> {
     try {
       final data = await widget.apiClient.getProfileMe();
       if (!mounted) return;
+      // Race condition guard: _loadMe beklenirken onUnauthorized tetiklenmiş
+      // ve _loggedIn = false yapılmış olabilir. Stale data set etme.
+      if (!_loggedIn) return;
       setState(() {
         _meData = data;
         _loadingMe = false;
       });
     } catch (e) {
       if (!mounted) return;
+      if (!_loggedIn) return;
       setState(() {
-        _meError = e.toString();
+        _meError = _friendlyAuthError(e);
         _loadingMe = false;
       });
     }
+  }
+
+  /// Kullanıcıya gösterilecek auth hata mesajı — teknik detayları gizler.
+  String _friendlyAuthError(Object e) {
+    if (e is DioException) {
+      final status = e.response?.statusCode;
+      if (status == 401 || status == 403) {
+        return 'Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.';
+      }
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        return 'Bağlantı zaman aşımına uğradı. İnternet bağlantınızı kontrol edin.';
+      }
+      if (e.type == DioExceptionType.connectionError) {
+        return 'Sunucuya ulaşılamıyor. İnternet bağlantınızı kontrol edin.';
+      }
+      // e.error içinde backend mesajı olabilir ama URL/path barındırmıyorsa göster
+      final msg = e.error?.toString() ?? '';
+      if (msg.isNotEmpty &&
+          !msg.contains('http') &&
+          !msg.contains('DioException') &&
+          !msg.contains('SocketException')) {
+        return msg;
+      }
+      return 'Profil bilgisi alınamadı. Lütfen tekrar deneyin.';
+    }
+    final s = e.toString().replaceFirst('Exception: ', '');
+    return s.isEmpty ? 'Bir hata oluştu.' : s;
   }
 
   bool _isProfileComplete(Map<String, dynamic> meData) {

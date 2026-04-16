@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../storage/token_storage.dart';
 import 'auth_events.dart';
 

@@ -72,7 +72,9 @@ class MySessionsPageState extends State<MySessionsPage> {
       final raw = res.data;
 
       if (raw is! Map) throw Exception('Beklenmeyen response');
-      if (raw['ok'] != true) throw Exception((raw['msg'] ?? 'Hata').toString());
+      // Backend hem ok hem success döndürebilir; ikisini de destekle.
+      final isOk = raw['ok'] == true || raw['success'] == true;
+      if (!isOk) throw Exception((raw['msg'] ?? raw['message'] ?? 'Hata').toString());
 
       final data = raw['data'];
       if (data is! Map) throw Exception('data alanı yok');
@@ -80,8 +82,15 @@ class MySessionsPageState extends State<MySessionsPage> {
       final up = (data['upcoming'] is List) ? List.from(data['upcoming']) : [];
       final past = (data['past'] is List) ? List.from(data['past']) : [];
 
-      final upcoming = up.map((e) => Map<String, dynamic>.from(e as Map)).toList();
-      final pastList = past.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+      // Güvenli cast: liste elemanı Map değilse (beklenmeyen backend verisi) atla.
+      final upcoming = up
+          .whereType<Map>()
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
+      final pastList = past
+          .whereType<Map>()
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
 
       final paketRaw = data['paket'] ?? data['package'] ?? data['session_info'];
       final paket = (paketRaw is Map)
@@ -98,16 +107,14 @@ class MySessionsPageState extends State<MySessionsPage> {
           ));
 
       if (!mounted) return;
+      // Tab otomatik geçişini aynı setState içinde yaparak double rebuild engellendi.
       setState(() {
         _upcoming = upcoming;
         _past = pastList;
         _paket = paket;
         _loading = false;
+        if (upcoming.isEmpty && pastList.isNotEmpty) _tab = 1;
       });
-
-      if (_upcoming.isEmpty && _past.isNotEmpty && _tab != 1) {
-        setState(() => _tab = 1);
-      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
