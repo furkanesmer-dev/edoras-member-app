@@ -146,8 +146,7 @@ class _AuthGateState extends State<AuthGate> {
       }
       return 'Profil bilgisi alınamadı. Lütfen tekrar deneyin.';
     }
-    final s = e.toString().replaceFirst('Exception: ', '');
-    return s.isEmpty ? 'Bir hata oluştu.' : s;
+    return 'Bir hata oluştu. Lütfen tekrar deneyin.';
   }
 
   bool _isProfileComplete(Map<String, dynamic> meData) {
