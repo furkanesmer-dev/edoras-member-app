@@ -438,7 +438,7 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('İşlem yapılamadı: $e')),
+      SnackBar(content: Text('İşlem gerçekleştirilemedi. Lütfen tekrar deneyin.')),
     );
   } finally {
     if (mounted) {

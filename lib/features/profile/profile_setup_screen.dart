@@ -148,7 +148,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       await widget.apiClient.updateProfile(payload);
       await widget.onSaved();
     } catch (e) {
-      setState(() => _error = e.toString());
+      setState(() => _error = 'Profil kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -163,7 +163,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
         : '${_dogumTarihi!.day.toString().padLeft(2, '0')}.${_dogumTarihi!.month.toString().padLeft(2, '0')}.${_dogumTarihi!.year}';
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -178,12 +178,14 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     const SizedBox(height: 8),
 
                     Center(
-                      child: Image.asset(
-                        'assets/icons/edoras_logo_black_transparent_1024.png',
-                        height: 110,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+  child: Image.asset(
+    Theme.of(context).brightness == Brightness.dark
+        ? 'assets/icons/edoras_logo_white_transparent_1024.png'
+        : 'assets/icons/edoras_logo_black_transparent_1024.png',
+    height: 110,
+    fit: BoxFit.contain,
+  ),
+),
 
                     const SizedBox(height: 10),
                     Center(
