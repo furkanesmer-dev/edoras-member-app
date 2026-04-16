@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        _error = e.toString();
+        _error = "Bir hata oluştu. Lütfen tekrar deneyin.";
       });
     }
   }

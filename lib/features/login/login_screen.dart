@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                      inner['token'] ?? inner['access_token'] ?? inner['jwt'])?.toString();
 
       if (token == null || token.isEmpty) {
-        throw Exception('Token alınamadı. Response: $data');
+        throw Exception('Giriş başarısız. Lütfen tekrar deneyin.');
       }
 
       await widget.tokenStorage.writeToken(token);
@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: const EdgeInsets.all(14),
                           child: Image.asset(
                             isDark
-                                ? 'assets/icons/edoras_logo_black_transparent_1024.png'
+                                ? 'assets/icons/edoras_logo_white_transparent_1024.png'
                                 : 'assets/icons/edoras_logo_black_transparent_1024.png',
                             fit: BoxFit.contain,
                           ),
