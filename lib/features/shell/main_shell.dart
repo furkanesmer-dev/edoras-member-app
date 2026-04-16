@@ -57,10 +57,15 @@ class _MainShellState extends State<MainShell> {
   }
 
   Future<void> _reloadCurrent() async {
-    if (_index == 0)      await _homeKey.currentState?.reload();
-    else if (_index == 1) await _sessionsKey.currentState?.reload();
-    else if (_index == 2) await _workoutKey.currentState?.reloadPlans();
-    else if (_index == 3) await _nutritionHubKey.currentState?.reloadPlans();
+    if (_index == 0) {
+      await _homeKey.currentState?.reload();
+    } else if (_index == 1) {
+      await _sessionsKey.currentState?.reload();
+    } else if (_index == 2) {
+      await _workoutKey.currentState?.reloadPlans();
+    } else if (_index == 3) {
+      await _nutritionHubKey.currentState?.reloadPlans();
+    }
   }
 
   void _onTabChange(int i) {
@@ -121,26 +126,26 @@ class _BottomBar extends StatelessWidget {
               height: 68,
               decoration: BoxDecoration(
                 color: isDark
-                    ? AppColors.darkSurface2.withOpacity(0.95)
-                    : Colors.white.withOpacity(0.92),
+                    ? AppColors.darkSurface2.withValues(alpha: 0.95)
+                    : Colors.white.withValues(alpha: 0.92),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
                   color: isDark
-                      ? AppColors.primary.withOpacity(0.20)
+                      ? AppColors.primary.withValues(alpha: 0.20)
                       : AppColors.lightBorder,
                   width: 1,
                 ),
                 boxShadow: [
                   if (isDark)
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.12),
+                      color: AppColors.primary.withValues(alpha: 0.12),
                       blurRadius: 20,
                       offset: const Offset(0, 0),
                     ),
                   BoxShadow(
                     color: isDark
-                        ? Colors.black.withOpacity(0.55)
-                        : Colors.black.withOpacity(0.08),
+                        ? Colors.black.withValues(alpha: 0.55)
+                        : Colors.black.withValues(alpha: 0.08),
                     blurRadius: 30,
                     offset: const Offset(0, 10),
                   ),
@@ -200,8 +205,8 @@ class _BarItem extends StatelessWidget {
           gradient: selected
               ? LinearGradient(
                   colors: [
-                    activeColor.withOpacity(0.18),
-                    activeColor.withOpacity(0.07),
+                    activeColor.withValues(alpha: 0.18),
+                    activeColor.withValues(alpha: 0.07),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

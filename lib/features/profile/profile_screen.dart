@@ -349,7 +349,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final ad = _asStringOrNull(p['ad']) ?? '';
     final soyad = _asStringOrNull(p['soyad']) ?? '';
-    final fullName = (ad + ' ' + soyad).trim();
+    final fullName = '$ad $soyad'.trim();
 
     final email = _asStringOrNull(p['eposta_adresi']);
     final phone = _asStringOrNull(p['tel_no']);
@@ -617,7 +617,7 @@ class _BrightProfileBackground extends StatelessWidget {
                 height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
+                  color: AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -629,7 +629,7 @@ class _BrightProfileBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.07),
+                  color: AppColors.secondary.withValues(alpha: isDark ? 0.10 : 0.07),
                 ),
               ),
             ),
@@ -641,7 +641,7 @@ class _BrightProfileBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
+                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -685,7 +685,7 @@ class _PremiumProfileHero extends StatelessWidget {
               height: 96,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF7FB2FF).withOpacity(0.18),
+                color: const Color(0xFF7FB2FF).withValues(alpha: 0.18),
               ),
             ),
           ),
@@ -697,7 +697,7 @@ class _PremiumProfileHero extends StatelessWidget {
               height: 110,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFFFB074).withOpacity(0.14),
+                color: const Color(0xFFFFB074).withValues(alpha: 0.14),
               ),
             ),
           ),
@@ -815,12 +815,12 @@ class _AvatarButtonLarge extends StatelessWidget {
               border: Border.all(color: Colors.white, width: 3),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF7AA7FF).withOpacity(0.20),
+                  color: const Color(0xFF7AA7FF).withValues(alpha: 0.20),
                   blurRadius: 24,
                   offset: const Offset(0, 10),
                 ),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 14,
                   offset: const Offset(0, 5),
                 ),
@@ -868,7 +868,7 @@ class _AvatarButtonLarge extends StatelessWidget {
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF4F7CFF).withOpacity(0.24),
+                    color: const Color(0xFF4F7CFF).withValues(alpha: 0.24),
                     blurRadius: 14,
                     offset: const Offset(0, 6),
                   ),
@@ -946,7 +946,7 @@ class _PremiumSubscriptionCard extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: (uyeAktif ? const Color(0xFF13C67B) : const Color(0xFFEF4444))
-                          .withOpacity(0.24),
+                          .withValues(alpha: 0.24),
                       blurRadius: 18,
                       offset: const Offset(0, 8),
                     ),
@@ -1452,7 +1452,7 @@ class _SaveButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF4F7CFF).withOpacity(0.22),
+              color: const Color(0xFF4F7CFF).withValues(alpha: 0.22),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),
@@ -1556,7 +1556,7 @@ class _PremiumDropdownField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      value: value,
+      initialValue: value,
       items: items,
       onChanged: onChanged,
       icon: const Icon(Icons.keyboard_arrow_down_rounded),
@@ -1658,7 +1658,7 @@ class _CardSectionHeader extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: accent.withOpacity(0.10),
+            color: accent.withValues(alpha: 0.10),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(icon, size: 22, color: accent),
@@ -1715,7 +1715,7 @@ class _MetricTile extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE8EEF7)),
         boxShadow: [
           BoxShadow(
-            color: accent.withOpacity(0.08),
+            color: accent.withValues(alpha: 0.08),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -1786,7 +1786,7 @@ class _HeroTargetTile extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: const Color(0xFF4F7CFF).withOpacity(0.12),
+              color: const Color(0xFF4F7CFF).withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
@@ -1836,7 +1836,7 @@ class _HeroTargetTile extends StatelessWidget {
               ],
             ),
           ),
-          Icon(icon, color: const Color(0xFF4F7CFF).withOpacity(0.55)),
+          Icon(icon, color: const Color(0xFF4F7CFF).withValues(alpha: 0.55)),
         ],
       ),
     );
@@ -1868,7 +1868,7 @@ class _MacroTargetTile extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE8EEF7)),
         boxShadow: [
           BoxShadow(
-            color: accent.withOpacity(0.08),
+            color: accent.withValues(alpha: 0.08),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -1981,9 +1981,9 @@ class _ContactInfoChip extends StatelessWidget {
       height: 46,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: accent.withOpacity(0.08),
+        color: accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: accent.withOpacity(0.14)),
+        border: Border.all(color: accent.withValues(alpha: 0.14)),
       ),
       child: Row(
         children: [
@@ -2019,7 +2019,7 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: accent.withOpacity(0.10),
+      color: accent.withValues(alpha: 0.10),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -2029,7 +2029,7 @@ class _CircleIconButton extends StatelessWidget {
           height: 42,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: accent.withOpacity(0.14)),
+            border: Border.all(color: accent.withValues(alpha: 0.14)),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
@@ -2055,8 +2055,8 @@ class _MiniPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: color.withOpacity(0.10),
-        border: Border.all(color: color.withOpacity(0.14)),
+        color: color.withValues(alpha: 0.10),
+        border: Border.all(color: color.withValues(alpha: 0.14)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -2093,8 +2093,8 @@ class _StatusChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: color.withOpacity(0.10),
-        border: Border.all(color: color.withOpacity(0.16)),
+        color: color.withValues(alpha: 0.10),
+        border: Border.all(color: color.withValues(alpha: 0.16)),
       ),
       child: Text(
         text,
@@ -2137,7 +2137,7 @@ class _InfoTile extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.10),
+              color: color.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, size: 18, color: color),
@@ -2191,7 +2191,7 @@ class _SheetActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: accent.withOpacity(0.08),
+      color: accent.withValues(alpha: 0.08),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
@@ -2200,7 +2200,7 @@ class _SheetActionTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: accent.withOpacity(0.12)),
+            border: Border.all(color: accent.withValues(alpha: 0.12)),
           ),
           child: Row(
             children: [
@@ -2324,13 +2324,13 @@ class _PremiumCardSurface extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.28)
-                : AppColors.primary.withOpacity(0.06),
+                ? Colors.black.withValues(alpha: 0.28)
+                : AppColors.primary.withValues(alpha: 0.06),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.18 : 0.04),
+            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

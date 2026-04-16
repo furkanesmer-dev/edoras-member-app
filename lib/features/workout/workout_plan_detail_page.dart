@@ -302,7 +302,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 220,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withOpacity(0.12),
+                  color: const Color(0xFF6EA8FF).withValues(alpha: 0.12),
                 ),
               ),
             ),
@@ -314,7 +314,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFFF8C5A).withOpacity(0.09),
+                  color: const Color(0xFFFF8C5A).withValues(alpha: 0.09),
                 ),
               ),
             ),
@@ -326,7 +326,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF17C67B).withOpacity(0.08),
+                  color: const Color(0xFF17C67B).withValues(alpha: 0.08),
                 ),
               ),
             ),
@@ -408,7 +408,7 @@ class _WorkoutHeroCard extends StatelessWidget {
               height: 92,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF7FB2FF).withOpacity(0.18),
+                color: const Color(0xFF7FB2FF).withValues(alpha: 0.18),
               ),
             ),
           ),
@@ -420,7 +420,7 @@ class _WorkoutHeroCard extends StatelessWidget {
               height: 98,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFFFB074).withOpacity(0.14),
+                color: const Color(0xFFFFB074).withValues(alpha: 0.14),
               ),
             ),
           ),
@@ -738,7 +738,7 @@ class _ExerciseCard extends StatelessWidget {
                   height: 34,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: const Color(0xFF4F7CFF).withOpacity(0.10),
+                    color: const Color(0xFF4F7CFF).withValues(alpha: 0.10),
                   ),
                   child: const Icon(
                     Icons.open_in_full_rounded,
@@ -775,7 +775,7 @@ class _SectionHeader extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: accent.withOpacity(0.10),
+            color: accent.withValues(alpha: 0.10),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(icon, color: accent, size: 21),
@@ -828,9 +828,9 @@ class _HeroInfoChip extends StatelessWidget {
       height: 46,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: accent.withOpacity(0.08),
+        color: accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: accent.withOpacity(0.14)),
+        border: Border.all(color: accent.withValues(alpha: 0.14)),
       ),
       child: Row(
         children: [
@@ -869,7 +869,7 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: accent.withOpacity(0.10),
+      color: accent.withValues(alpha: 0.10),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -879,7 +879,7 @@ class _CircleIconButton extends StatelessWidget {
           height: 42,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: accent.withOpacity(0.14)),
+            border: Border.all(color: accent.withValues(alpha: 0.14)),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
@@ -903,8 +903,8 @@ class _StatusChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: color.withOpacity(0.10),
-        border: Border.all(color: color.withOpacity(0.16)),
+        color: color.withValues(alpha: 0.10),
+        border: Border.all(color: color.withValues(alpha: 0.16)),
       ),
       child: Text(
         text,
@@ -942,7 +942,7 @@ class _EmptyStateCard extends StatelessWidget {
             width: 62,
             height: 62,
             decoration: BoxDecoration(
-              color: accent.withOpacity(0.10),
+              color: accent.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(icon, size: 30, color: accent),
@@ -1106,12 +1106,12 @@ class _PremiumCardSurface extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF8DAEF5).withOpacity(0.12),
+            color: const Color(0xFF8DAEF5).withValues(alpha: 0.12),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

@@ -53,7 +53,7 @@ class AppTheme {
 
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.lightSurface2,
-        selectedColor: AppColors.primary.withOpacity(0.12),
+        selectedColor: AppColors.primary.withValues(alpha: 0.12),
         side: const BorderSide(color: AppColors.lightBorder),
         labelStyle: const TextStyle(
           color: AppColors.lightText,
@@ -204,7 +204,7 @@ class AppTheme {
 
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.darkSurface2,
-        selectedColor: AppColors.primaryLight.withOpacity(0.20),
+        selectedColor: AppColors.primaryLight.withValues(alpha: 0.20),
         side: const BorderSide(color: AppColors.darkBorder),
         labelStyle: const TextStyle(
           color: AppColors.darkText,

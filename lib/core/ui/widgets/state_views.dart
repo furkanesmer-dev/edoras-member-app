@@ -66,7 +66,7 @@ class EmptyView extends StatelessWidget {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.10),
+                color: color.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Icon(icon, size: 34, color: color),
@@ -132,7 +132,7 @@ class ErrorView extends StatelessWidget {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: AppColors.danger.withOpacity(0.10),
+                color: AppColors.danger.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: const Icon(

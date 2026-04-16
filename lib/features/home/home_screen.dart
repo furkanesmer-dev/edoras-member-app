@@ -368,7 +368,7 @@ class _BrightHomeBackground extends StatelessWidget {
                 height: 250,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
+                  color: AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -380,7 +380,7 @@ class _BrightHomeBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.07),
+                  color: AppColors.secondary.withValues(alpha: isDark ? 0.10 : 0.07),
                 ),
               ),
             ),
@@ -392,7 +392,7 @@ class _BrightHomeBackground extends StatelessWidget {
                 height: 160,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.06),
+                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.06),
                 ),
               ),
             ),
@@ -482,12 +482,12 @@ class _AvatarButton extends StatelessWidget {
           shape: BoxShape.circle,
           color: isDark ? AppColors.darkSurface : Colors.white,
           border: Border.all(
-            color: isDark ? AppColors.primaryLight.withOpacity(0.40) : AppColors.primary.withOpacity(0.25),
+            color: isDark ? AppColors.primaryLight.withValues(alpha: 0.40) : AppColors.primary.withValues(alpha: 0.25),
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.20),
+              color: AppColors.primary.withValues(alpha: 0.20),
               blurRadius: 18,
               offset: const Offset(0, 6),
             ),
@@ -557,7 +557,7 @@ class _HeroWelcomeCard extends StatelessWidget {
               height: 88,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(isDark ? 0.12 : 0.08),
+                color: AppColors.primary.withValues(alpha: isDark ? 0.12 : 0.08),
               ),
             ),
           ),
@@ -569,7 +569,7 @@ class _HeroWelcomeCard extends StatelessWidget {
               height: 92,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.07),
+                color: AppColors.secondary.withValues(alpha: isDark ? 0.10 : 0.07),
               ),
             ),
           ),
@@ -643,7 +643,7 @@ class _HeroMiniButton extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Material(
-      color: color.withOpacity(isDark ? 0.15 : 0.10),
+      color: color.withValues(alpha: isDark ? 0.15 : 0.10),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
@@ -652,7 +652,7 @@ class _HeroMiniButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withOpacity(0.22)),
+            border: Border.all(color: color.withValues(alpha: 0.22)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -711,7 +711,7 @@ class _SubscriptionPremiumCard extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: statusColor.withOpacity(0.24),
+                      color: statusColor.withValues(alpha: 0.24),
                       blurRadius: 18,
                       offset: const Offset(0, 8),
                     ),
@@ -800,7 +800,7 @@ class _MotivationBanner extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF5B8DFF).withOpacity(0.20),
+              color: const Color(0xFF5B8DFF).withValues(alpha: 0.20),
               blurRadius: 24,
               offset: const Offset(0, 10),
             ),
@@ -817,8 +817,8 @@ class _MotivationBanner extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF0F172A).withOpacity(0.25),
-                    const Color(0xFF0F172A).withOpacity(0.58),
+                    const Color(0xFF0F172A).withValues(alpha: 0.25),
+                    const Color(0xFF0F172A).withValues(alpha: 0.58),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -833,7 +833,7 @@ class _MotivationBanner extends StatelessWidget {
                 height: 88,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.12),
+                  color: Colors.white.withValues(alpha: 0.12),
                 ),
               ),
             ),
@@ -857,7 +857,7 @@ class _MotivationBanner extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withOpacity(0.92),
+                          color: Colors.white.withValues(alpha: 0.92),
                           fontWeight: FontWeight.w600,
                           height: 1.35,
                         ),
@@ -938,7 +938,7 @@ class _PrimaryActionCard extends StatelessWidget {
             height: 34,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: accent.withOpacity(0.10),
+              color: accent.withValues(alpha: 0.10),
             ),
             child: Icon(
               Icons.arrow_forward_rounded,
@@ -1173,7 +1173,7 @@ class _MacroStatTile extends StatelessWidget {
         border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
         boxShadow: [
           BoxShadow(
-            color: accent.withOpacity(0.10),
+            color: accent.withValues(alpha: 0.10),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -1258,14 +1258,14 @@ class _IllustrationBubble extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            accent.withOpacity(0.18),
-            accent.withOpacity(0.08),
+            accent.withValues(alpha: 0.18),
+            accent.withValues(alpha: 0.08),
           ],
         ),
-        border: Border.all(color: accent.withOpacity(0.14)),
+        border: Border.all(color: accent.withValues(alpha: 0.14)),
         boxShadow: [
           BoxShadow(
-            color: accent.withOpacity(0.14),
+            color: accent.withValues(alpha: 0.14),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -1310,7 +1310,7 @@ class _InfoTile extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.10),
+              color: color.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, size: 18, color: color),
@@ -1363,8 +1363,8 @@ class _Badge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: accent.withOpacity(0.10),
-        border: Border.all(color: accent.withOpacity(0.14)),
+        color: accent.withValues(alpha: 0.10),
+        border: Border.all(color: accent.withValues(alpha: 0.14)),
       ),
       child: Text(
         text,
@@ -1394,8 +1394,8 @@ class _StatusChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: color.withOpacity(0.10),
-        border: Border.all(color: color.withOpacity(0.16)),
+        color: color.withValues(alpha: 0.10),
+        border: Border.all(color: color.withValues(alpha: 0.16)),
       ),
       child: Text(
         text,
@@ -1437,13 +1437,13 @@ class _PremiumCardSurface extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.30)
-                : AppColors.primary.withOpacity(0.06),
+                ? Colors.black.withValues(alpha: 0.30)
+                : AppColors.primary.withValues(alpha: 0.06),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.20 : 0.04),
+            color: Colors.black.withValues(alpha: isDark ? 0.20 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
