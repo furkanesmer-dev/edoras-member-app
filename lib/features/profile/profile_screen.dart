@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!mounted) return;
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     } catch (e) {
-      _showSnack('Çıkış yapılamadı: $e');
+      _showSnack('Çıkış yapılamadı.');
     }
   }
 
@@ -193,7 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _showSnack('Profil kaydedildi.');
       await _load();
     } catch (e) {
-      _showSnack('Kaydetme hatası: $e');
+      _showSnack('Kaydedilemedi. Lütfen tekrar deneyin.');
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -324,7 +324,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _showSnack('Profil fotoğrafı güncellendi.');
     } catch (e) {
       if (mounted) setState(() => _photoUploading = false);
-      _showSnack('Fotoğraf yüklenemedi: $e');
+      _showSnack('Fotoğraf yüklenemedi.');
     }
   }
 
