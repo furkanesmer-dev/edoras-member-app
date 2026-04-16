@@ -46,13 +46,13 @@ class AppButton extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: isDisabled ? null : AppColors.primaryGradient,
-          color: isDisabled ? AppColors.primary.withOpacity(0.4) : null,
+          color: isDisabled ? AppColors.primary.withValues(alpha: 0.4) : null,
           borderRadius: BorderRadius.circular(16),
           boxShadow: isDisabled
               ? null
               : [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.40),
+                    color: AppColors.primary.withValues(alpha: 0.40),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),

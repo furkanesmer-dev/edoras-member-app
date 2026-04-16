@@ -133,9 +133,10 @@ class _ProfileSetupRouteState extends State<_ProfileSetupRoute> {
       apiClient: widget.apiClient,
       meData: _meData,
       onSaved: () async {
+        final nav = Navigator.of(context);
         await _loadMe();
         if (!mounted) return;
-        Navigator.pop(context);
+        nav.pop();
       },
     );
   }

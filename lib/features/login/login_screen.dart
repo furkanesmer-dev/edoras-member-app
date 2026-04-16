@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.primary.withOpacity(isDark ? 0.20 : 0.12),
+                    AppColors.primary.withValues(alpha: isDark ? 0.20 : 0.12),
                     Colors.transparent,
                   ],
                 ),
@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.secondary.withOpacity(isDark ? 0.14 : 0.08),
+                    AppColors.secondary.withValues(alpha: isDark ? 0.14 : 0.08),
                     Colors.transparent,
                   ],
                 ),
@@ -164,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primary.withOpacity(0.15),
+                                color: AppColors.primary.withValues(alpha: 0.15),
                                 blurRadius: 24,
                                 offset: const Offset(0, 8),
                               ),
@@ -241,9 +241,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: const EdgeInsets.only(bottom: 16),
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(
-                            color: AppColors.danger.withOpacity(0.10),
+                            color: AppColors.danger.withValues(alpha: 0.10),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.danger.withOpacity(0.30)),
+                            border: Border.all(color: AppColors.danger.withValues(alpha: 0.30)),
                           ),
                           child: Text(
                             _error!,
@@ -262,13 +262,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             gradient: _loading ? null : AppColors.primaryGradient,
-                            color: _loading ? AppColors.primary.withOpacity(0.4) : null,
+                            color: _loading ? AppColors.primary.withValues(alpha: 0.4) : null,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: _loading
                                 ? null
                                 : [
                                     BoxShadow(
-                                      color: AppColors.primary.withOpacity(0.40),
+                                      color: AppColors.primary.withValues(alpha: 0.40),
                                       blurRadius: 20,
                                       offset: const Offset(0, 8),
                                     ),

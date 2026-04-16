@@ -546,7 +546,7 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: accent.withOpacity(0.10),
+      color: accent.withValues(alpha: 0.10),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -556,7 +556,7 @@ class _CircleIconButton extends StatelessWidget {
           height: 42,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: accent.withOpacity(0.14)),
+            border: Border.all(color: accent.withValues(alpha: 0.14)),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
@@ -611,7 +611,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 220,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withOpacity(0.12),
+                  color: const Color(0xFF6EA8FF).withValues(alpha: 0.12),
                 ),
               ),
             ),
@@ -623,7 +623,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFFFF8C5A).withOpacity(0.09),
+                  color: const Color(0xFFFF8C5A).withValues(alpha: 0.09),
                 ),
               ),
             ),
@@ -635,7 +635,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF17C67B).withOpacity(0.08),
+                  color: const Color(0xFF17C67B).withValues(alpha: 0.08),
                 ),
               ),
             ),
