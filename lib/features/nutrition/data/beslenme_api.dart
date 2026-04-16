@@ -45,6 +45,13 @@ class BeslenmeApi {
     final raw = res.data;
     if (raw is Map) {
       final map = Map<String, dynamic>.from(raw);
+      final ok = map['ok'] == true || map['success'] == true;
+      if (!ok) {
+        final msg = map['message']?.toString() ??
+            map['error']?.toString() ??
+            'Yemek eklenemedi';
+        throw Exception(msg);
+      }
       if (map['data'] is Map) {
         return Map<String, dynamic>.from(map['data']);
       }
@@ -72,6 +79,13 @@ class BeslenmeApi {
     final raw = res.data;
     if (raw is Map) {
       final map = Map<String, dynamic>.from(raw);
+      final ok = map['ok'] == true || map['success'] == true;
+      if (!ok) {
+        final msg = map['message']?.toString() ??
+            map['error']?.toString() ??
+            'Yemek silinemedi';
+        throw Exception(msg);
+      }
       if (map['data'] is Map) {
         return Map<String, dynamic>.from(map['data']);
       }

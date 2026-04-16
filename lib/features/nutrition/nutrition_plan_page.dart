@@ -113,8 +113,10 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
             final meal = int.tryParse(entry.key) ?? 0;
             if (meal < 1 || meal > 5) continue;
 
-            final list = (entry.value as List? ?? const [])
-                .map((e) => Map<String, dynamic>.from(e as Map))
+            final rawList = entry.value;
+            final list = (rawList is List ? rawList : const [])
+                .whereType<Map>()
+                .map((e) => Map<String, dynamic>.from(e))
                 .toList();
 
             mapped[meal] = list;
@@ -166,8 +168,14 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
   }
 
   Map<String, dynamic> _extractDataMap(dynamic raw) {
-    final map =
-        (raw is Map) ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
+    if (raw == null) return <String, dynamic>{};
+    final map = (raw is Map) ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
+
+    final hasStatusField = map.containsKey('ok') || map.containsKey('success');
+    if (hasStatusField) {
+      final isOk = map['ok'] == true || map['success'] == true;
+      if (!isOk) return <String, dynamic>{};
+    }
 
     final inner = (map['data'] is Map)
         ? Map<String, dynamic>.from(map['data'])
