@@ -27,30 +27,19 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _index = 0;
 
-  final _homeKey      = GlobalKey<HomeScreenState>();
-  final _sessionsKey  = GlobalKey<MySessionsPageState>();
-  final _workoutKey   = GlobalKey<WorkoutPlanPageState>();
+  final _homeKey         = GlobalKey<HomeScreenState>();
+  final _sessionsKey     = GlobalKey<MySessionsPageState>();
+  final _workoutKey      = GlobalKey<WorkoutPlanPageState>();
   final _nutritionHubKey = GlobalKey<NutritionHubPageState>();
 
-  Future<void> _reloadCurrent() async {
-    if (_index == 0)      await _homeKey.currentState?.reload();
-    else if (_index == 1) await _sessionsKey.currentState?.reload();
-    else if (_index == 2) await _workoutKey.currentState?.reloadPlans();
-    else if (_index == 3) await _nutritionHubKey.currentState?.reloadPlans();
-  }
-
-  void _onTabChange(int i) {
-    if (_index == i) {
-      Future.microtask(_reloadCurrent);
-      return;
-    }
-    setState(() => _index = i);
-    Future.microtask(_reloadCurrent);
-  }
+  // Sayfalar bir kez oluşturulur ve build() her çağrıldığında yeniden yaratılmaz.
+  // Bu sayede tab değişiminde gereksiz widget allocation önlenir.
+  late final List<Widget> _pages;
 
   @override
-  Widget build(BuildContext context) {
-    final pages = <Widget>[
+  void initState() {
+    super.initState();
+    _pages = [
       HomeScreen(
         key: _homeKey,
         apiClient: widget.apiClient,
@@ -65,12 +54,32 @@ class _MainShellState extends State<MainShell> {
       NutritionHubPage(key: _nutritionHubKey, apiClient: widget.apiClient),
       ProfileScreen(apiClient: widget.apiClient, tokenStorage: widget.tokenStorage),
     ];
+  }
 
+  Future<void> _reloadCurrent() async {
+    if (_index == 0)      await _homeKey.currentState?.reload();
+    else if (_index == 1) await _sessionsKey.currentState?.reload();
+    else if (_index == 2) await _workoutKey.currentState?.reloadPlans();
+    else if (_index == 3) await _nutritionHubKey.currentState?.reloadPlans();
+  }
+
+  void _onTabChange(int i) {
+    // Aynı taba tekrar tıklanırsa sayfayı yenile (pull-to-refresh alternatifi).
+    // Farklı taba geçişte yeniden yükleme YAPILMAZ — gereksiz network trafik önlenir.
+    if (_index == i) {
+      Future.microtask(_reloadCurrent);
+      return;
+    }
+    setState(() => _index = i);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       body: SafeArea(
         bottom: false,
-        child: IndexedStack(index: _index, children: pages),
+        child: IndexedStack(index: _index, children: _pages),
       ),
       bottomNavigationBar: _BottomBar(
         currentIndex: _index,
