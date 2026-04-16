@@ -89,7 +89,7 @@ class WorkoutPlanPageState extends State<WorkoutPlanPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = e.toString().replaceFirst('Exception: ', '');
+        _error = 'Antrenman planı yüklenemedi. Lütfen tekrar deneyin.';
         _loading = false;
       });
     }
