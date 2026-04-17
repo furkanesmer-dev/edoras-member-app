@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     } catch (e) {
       setState(() {
-        _error = 'Kayıt oluşturulamadı. Lütfen tekrar deneyin.';
+        _error = e.toString().replaceFirst('Exception: ', '');
       });
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(colors: [
-                  AppColors.primary.withValues(alpha: isDark ? 0.18 : 0.10),
+                  AppColors.primary.withOpacity(isDark ? 0.18 : 0.10),
                   Colors.transparent,
                 ]),
               ),
@@ -131,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(colors: [
-                  AppColors.secondary.withValues(alpha: isDark ? 0.14 : 0.08),
+                  AppColors.secondary.withOpacity(isDark ? 0.14 : 0.08),
                   Colors.transparent,
                 ]),
               ),
@@ -153,30 +153,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         // Logo
                         Center(
-                          child: Container(
-                            width: 72,
-                            height: 72,
-                            decoration: BoxDecoration(
-                              color: isDark ? AppColors.darkSurface : Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withValues(alpha: 0.15),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.all(12),
+                          child: ColorFiltered(
+                            colorFilter: isDark
+                                ? const ColorFilter.matrix([
+                                    -1, 0, 0, 0, 255,
+                                    0, -1, 0, 0, 255,
+                                    0, 0, -1, 0, 255,
+                                    0, 0, 0, 1, 0,
+                                  ])
+                                : const ColorFilter.mode(
+                                    Colors.transparent, BlendMode.multiply),
                             child: Image.asset(
-  Theme.of(context).brightness == Brightness.dark
-      ? 'assets/icons/edoras_logo_white_transparent_1024.png'
-      : 'assets/icons/edoras_logo_black_transparent_1024.png',
-  fit: BoxFit.contain,
-),
+                              'assets/icons/edoras_logo_black_transparent_1024.png',
+                              height: 110,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
 
@@ -267,9 +258,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             decoration: BoxDecoration(
-                              color: AppColors.danger.withValues(alpha: 0.10),
+                              color: AppColors.danger.withOpacity(0.10),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppColors.danger.withValues(alpha: 0.30)),
+                              border: Border.all(color: AppColors.danger.withOpacity(0.30)),
                             ),
                             child: Text(
                               _error!,
@@ -288,13 +279,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               gradient: _loading ? null : AppColors.primaryGradient,
-                              color: _loading ? AppColors.primary.withValues(alpha: 0.4) : null,
+                              color: _loading ? AppColors.primary.withOpacity(0.4) : null,
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: _loading
                                   ? null
                                   : [
                                       BoxShadow(
-                                        color: AppColors.primary.withValues(alpha: 0.40),
+                                        color: AppColors.primary.withOpacity(0.40),
                                         blurRadius: 20,
                                         offset: const Offset(0, 8),
                                       ),
