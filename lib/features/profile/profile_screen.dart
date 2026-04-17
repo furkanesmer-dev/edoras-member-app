@@ -148,15 +148,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (_) => _SettingsSheet(
         onPasswordChange: () {
           Navigator.pop(context);
-          _launchUrl('${_siteBase}/parola_degistir.php');
+          _launchUrl('$_siteBase/parola_degistir.php');
         },
         onDeleteAccount: () {
           Navigator.pop(context);
-          _launchUrl('${_siteBase}/hesap_silme.php');
+          _launchUrl('$_siteBase/hesap_silme.php');
         },
         onPrivacyPolicy: () {
           Navigator.pop(context);
-          _launchUrl('${_siteBase}/gizlilik-politikasi');
+          _launchUrl('$_siteBase/gizlilik-politikasi');
         },
       ),
     );
@@ -165,8 +165,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _launchUrl(String url) async {
     final uri = Uri.tryParse(url);
     if (uri == null) return;
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    try {
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) await launchUrl(uri, mode: LaunchMode.platformDefault);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tarayıcı açılamadı: $url')),
+        );
+      }
     }
   }
 
@@ -1795,17 +1802,15 @@ class _HeroTargetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFFEEF4FF),
-            Color(0xFFF7FAFF),
-          ],
-        ),
+        gradient: isDark
+            ? LinearGradient(colors: [AppColors.darkSurface2, AppColors.darkSurface2])
+            : const LinearGradient(colors: [Color(0xFFEEF4FF), Color(0xFFF7FAFF)]),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFDCE7FB)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFDCE7FB)),
       ),
       child: Row(
         children: [
@@ -1887,12 +1892,13 @@ class _MacroTargetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface2 : Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         boxShadow: [
           BoxShadow(
             color: accent.withValues(alpha: 0.08),
@@ -2151,12 +2157,13 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBFDFF),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
