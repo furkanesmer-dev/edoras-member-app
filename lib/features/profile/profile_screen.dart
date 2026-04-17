@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ApiClient apiClient;
@@ -137,6 +138,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final dt = _asStringOrNull(p['dogum_tarihi']);
     _dogumTarihi = _parseYmd(dt);
+  }
+
+  void _openSettingsSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => _SettingsSheet(
+        onPasswordChange: () {
+          Navigator.pop(context);
+          _launchUrl('$_siteBase/parola_degistir.php');
+        },
+        onDeleteAccount: () {
+          Navigator.pop(context);
+          _launchUrl('$_siteBase/hesap_silme.php');
+        },
+        onPrivacyPolicy: () {
+          Navigator.pop(context);
+          _launchUrl('$_siteBase/gizlilik-politikasi');
+        },
+      ),
+    );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
+    try {
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) await launchUrl(uri, mode: LaunchMode.platformDefault);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tarayıcı açılamadı: $url')),
+        );
+      }
+    }
   }
 
   Future<void> _logout() async {
@@ -383,6 +421,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         isUploading: _photoUploading,
                         onAvatarTap: _openPhotoSheet,
                         onLogout: _logout,
+                        onSettingsTap: _openSettingsSheet,
                       ),
                       const SizedBox(height: 14),
                       _PremiumSubscriptionCard(subscription: sub),
@@ -660,6 +699,7 @@ class _PremiumProfileHero extends StatelessWidget {
   final bool isUploading;
   final VoidCallback onAvatarTap;
   final VoidCallback onLogout;
+  final VoidCallback onSettingsTap;
 
   const _PremiumProfileHero({
     required this.fullName,
@@ -669,6 +709,7 @@ class _PremiumProfileHero extends StatelessWidget {
     required this.isUploading,
     required this.onAvatarTap,
     required this.onLogout,
+    required this.onSettingsTap,
   });
 
   @override
@@ -705,22 +746,10 @@ class _PremiumProfileHero extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(999),
-                      color: const Color(0xFFEFF5FF),
-                      border: Border.all(color: const Color(0xFFD8E7FF)),
-                    ),
-                    child: const Text(
-                      'Profil',
-                      style: TextStyle(
-                        color: Color(0xFF2852C8),
-                        fontWeight: FontWeight.w800,
-                        fontSize: 12,
-                        height: 1,
-                      ),
-                    ),
+                  _CircleIconButton(
+                    icon: Icons.settings_rounded,
+                    accent: AppColors.primary,
+                    onTap: onSettingsTap,
                   ),
                   const Spacer(),
                   _CircleIconButton(
@@ -1125,10 +1154,13 @@ class _PremiumBodyInfoCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          Container(
-            height: 1,
-            color: const Color(0xFFE8EEF7),
-          ),
+          Builder(builder: (context) {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+            return Container(
+              height: 1,
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7),
+            );
+          }),
           const SizedBox(height: 14),
           Row(
             children: [
@@ -1521,15 +1553,15 @@ class _PremiumTextField extends StatelessWidget {
         labelText: label,
         hintText: hint,
         filled: true,
-        fillColor: const Color(0xFFFBFDFF),
+        fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -1555,6 +1587,7 @@ class _PremiumDropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return DropdownButtonFormField<T>(
       initialValue: value,
       items: items,
@@ -1563,15 +1596,15 @@ class _PremiumDropdownField<T> extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         filled: true,
-        fillColor: const Color(0xFFFBFDFF),
+        fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -1603,15 +1636,15 @@ class _DatePickerField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           filled: true,
-          fillColor: const Color(0xFFFBFDFF),
+          fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+            borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+            borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
           ),
         ),
         child: Row(
@@ -1707,12 +1740,13 @@ class _MetricTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface2 : Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         boxShadow: [
           BoxShadow(
             color: accent.withValues(alpha: 0.08),
@@ -1768,17 +1802,15 @@ class _HeroTargetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFFEEF4FF),
-            Color(0xFFF7FAFF),
-          ],
-        ),
+        gradient: isDark
+            ? LinearGradient(colors: [AppColors.darkSurface2, AppColors.darkSurface2])
+            : const LinearGradient(colors: [Color(0xFFEEF4FF), Color(0xFFF7FAFF)]),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFDCE7FB)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFDCE7FB)),
       ),
       child: Row(
         children: [
@@ -1860,12 +1892,13 @@ class _MacroTargetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface2 : Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         boxShadow: [
           BoxShadow(
             color: accent.withValues(alpha: 0.08),
@@ -2124,12 +2157,13 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBFDFF),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
@@ -2337,6 +2371,106 @@ class _PremiumCardSurface extends StatelessWidget {
         ],
       ),
       child: child,
+    );
+  }
+}
+
+class _SettingsSheet extends StatelessWidget {
+  final VoidCallback onPasswordChange;
+  final VoidCallback onDeleteAccount;
+  final VoidCallback onPrivacyPolicy;
+
+  const _SettingsSheet({
+    required this.onPasswordChange,
+    required this.onDeleteAccount,
+    required this.onPrivacyPolicy,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 0, 12, 28),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 12),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 8),
+          _SettingsItem(
+            icon: Icons.lock_outline_rounded,
+            label: 'Parola Değiştir',
+            onTap: onPasswordChange,
+          ),
+          Divider(
+            height: 1,
+            indent: 56,
+            endIndent: 16,
+            color: isDark ? AppColors.darkBorder : const Color(0xFFEEF2F8),
+          ),
+          _SettingsItem(
+            icon: Icons.privacy_tip_outlined,
+            label: 'Gizlilik Politikası',
+            onTap: onPrivacyPolicy,
+          ),
+          Divider(
+            height: 1,
+            indent: 56,
+            endIndent: 16,
+            color: isDark ? AppColors.darkBorder : const Color(0xFFEEF2F8),
+          ),
+          _SettingsItem(
+            icon: Icons.delete_outline_rounded,
+            label: 'Hesap Sil',
+            color: AppColors.danger,
+            onTap: onDeleteAccount,
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color? color;
+  final VoidCallback onTap;
+
+  const _SettingsItem({
+    required this.icon,
+    required this.label,
+    this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final c = color ?? (isDark ? AppColors.darkText : AppColors.lightText);
+    return ListTile(
+      leading: Icon(icon, color: c, size: 22),
+      title: Text(
+        label,
+        style: TextStyle(
+          color: c,
+          fontWeight: FontWeight.w700,
+          fontSize: 15,
+        ),
+      ),
+      onTap: onTap,
     );
   }
 }

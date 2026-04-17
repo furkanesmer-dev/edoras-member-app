@@ -72,9 +72,7 @@ class MySessionsPageState extends State<MySessionsPage> {
       final raw = res.data;
 
       if (raw is! Map) throw Exception('Beklenmeyen response');
-      // Backend hem ok hem success döndürebilir; ikisini de destekle.
-      final isOk = raw['ok'] == true || raw['success'] == true;
-      if (!isOk) throw Exception((raw['msg'] ?? raw['message'] ?? 'Hata').toString());
+      if (raw['ok'] != true) throw Exception((raw['msg'] ?? 'Hata').toString());
 
       final data = raw['data'];
       if (data is! Map) throw Exception('data alanı yok');
@@ -82,15 +80,8 @@ class MySessionsPageState extends State<MySessionsPage> {
       final up = (data['upcoming'] is List) ? List.from(data['upcoming']) : [];
       final past = (data['past'] is List) ? List.from(data['past']) : [];
 
-      // Güvenli cast: liste elemanı Map değilse (beklenmeyen backend verisi) atla.
-      final upcoming = up
-          .whereType<Map>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
-      final pastList = past
-          .whereType<Map>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
+      final upcoming = up.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+      final pastList = past.map((e) => Map<String, dynamic>.from(e as Map)).toList();
 
       final paketRaw = data['paket'] ?? data['package'] ?? data['session_info'];
       final paket = (paketRaw is Map)
@@ -107,18 +98,20 @@ class MySessionsPageState extends State<MySessionsPage> {
           ));
 
       if (!mounted) return;
-      // Tab otomatik geçişini aynı setState içinde yaparak double rebuild engellendi.
       setState(() {
         _upcoming = upcoming;
         _past = pastList;
         _paket = paket;
         _loading = false;
-        if (upcoming.isEmpty && pastList.isNotEmpty) _tab = 1;
       });
+
+      if (_upcoming.isEmpty && _past.isNotEmpty && _tab != 1) {
+        setState(() => _tab = 1);
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = "Bir hata oluştu. Lütfen tekrar deneyin.";
+        _error = e.toString();
         _loading = false;
       });
     }
@@ -647,23 +640,6 @@ class _SessionsHeroCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(999),
-                  color: const Color(0xFFEFF5FF),
-                  border: Border.all(color: const Color(0xFFD8E7FF)),
-                ),
-                child: const Text(
-                  'Seanslarım',
-                  style: TextStyle(
-                    color: Color(0xFF2852C8),
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12,
-                    height: 1,
-                  ),
-                ),
-              ),
               const SizedBox(height: 14),
               Text(
                 'Programını takip et,\nritmini koru.',
@@ -1038,7 +1014,7 @@ class _SessionPremiumCard extends StatelessWidget {
           const SizedBox(height: 14),
           Container(
             height: 1,
-            color: const Color(0xFFE8EEF7),
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7),
           ),
           const SizedBox(height: 14),
           Row(
@@ -1096,9 +1072,9 @@ class _DetailChip extends StatelessWidget {
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface2 : Colors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
@@ -1140,13 +1116,15 @@ class _PremiumPillTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 56,
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F8FD),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFF5F8FD),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE6EDF7)),
+        border: Border.all(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE6EDF7)),
       ),
       child: Row(
         children: [
@@ -1274,9 +1252,9 @@ class _InfoTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBFDFF),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
