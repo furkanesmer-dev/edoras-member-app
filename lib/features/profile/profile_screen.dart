@@ -705,23 +705,7 @@ class _PremiumProfileHero extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(999),
-                      color: const Color(0xFFEFF5FF),
-                      border: Border.all(color: const Color(0xFFD8E7FF)),
-                    ),
-                    child: const Text(
-                      'Profil',
-                      style: TextStyle(
-                        color: Color(0xFF2852C8),
-                        fontWeight: FontWeight.w800,
-                        fontSize: 12,
-                        height: 1,
-                      ),
-                    ),
-                  ),
+
                   const Spacer(),
                   _CircleIconButton(
                     icon: Icons.logout_rounded,
@@ -1521,15 +1505,15 @@ class _PremiumTextField extends StatelessWidget {
         labelText: label,
         hintText: hint,
         filled: true,
-        fillColor: const Color(0xFFFBFDFF),
+        fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -1555,6 +1539,7 @@ class _PremiumDropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return DropdownButtonFormField<T>(
       initialValue: value,
       items: items,
@@ -1563,15 +1548,15 @@ class _PremiumDropdownField<T> extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         filled: true,
-        fillColor: const Color(0xFFFBFDFF),
+        fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -1603,15 +1588,15 @@ class _DatePickerField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           filled: true,
-          fillColor: const Color(0xFFFBFDFF),
+          fillColor: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+            borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFE8EEF7)),
+            borderSide: BorderSide(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
           ),
         ),
         child: Row(
