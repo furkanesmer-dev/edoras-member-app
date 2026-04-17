@@ -16,3 +16,10 @@
 # Kotlin
 -dontwarn kotlin.**
 -keep class kotlin.** { *; }
+
+# url_launcher
+-keep class io.flutter.plugins.urllauncher.** { *; }
+
+# flutter_image_compress
+-keep class com.fluttercandies.compressimage.** { *; }
+-dontwarn com.fluttercandies.**
