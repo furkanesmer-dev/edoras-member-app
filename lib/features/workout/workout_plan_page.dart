@@ -587,7 +587,7 @@ class _ExerciseCard extends StatelessWidget {
                   height: 34,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: const Color(0xFF4F7CFF).withOpacity(0.10),
+                    color: const Color(0xFF4F7CFF).withValues(alpha: 0.10),
                   ),
                   child: const Icon(
                     Icons.open_in_full_rounded,
@@ -1006,9 +1006,9 @@ class _HeroInfoChip extends StatelessWidget {
       height: 46,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: accent.withOpacity(0.08),
+        color: accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: accent.withOpacity(0.14)),
+        border: Border.all(color: accent.withValues(alpha: 0.14)),
       ),
       child: Row(
         children: [
@@ -1054,7 +1054,7 @@ class _PremiumCardSurface extends StatelessWidget {
         border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.28) : AppColors.primary.withOpacity(0.06),
+            color: isDark ? Colors.black.withValues(alpha: 0.28) : AppColors.primary.withValues(alpha: 0.06),
             blurRadius: 22,
             offset: const Offset(0, 10),
           ),
@@ -1137,7 +1137,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
+                  color: AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -1149,7 +1149,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.06),
+                  color: AppColors.secondary.withValues(alpha: isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -1161,7 +1161,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
+                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
