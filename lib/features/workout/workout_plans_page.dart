@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:edoras_member_app/core/api/api_client.dart';
+import 'package:edoras_member_app/core/theme/app_colors.dart';
 import 'workout_plan_detail_page.dart';
 
 class WorkoutPlansPage extends StatefulWidget {
@@ -74,7 +75,7 @@ class WorkoutPlansPageState extends State<WorkoutPlansPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = 'Planlar yüklenemedi. Lütfen tekrar deneyin.';
+        _error = e.toString().replaceFirst('Exception: ', '');
         _loading = false;
       });
     }
@@ -221,6 +222,7 @@ class _ArchiveTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         if (Navigator.canPop(context))
@@ -234,7 +236,7 @@ class _ArchiveTopBar extends StatelessWidget {
           child: Text(
             'Geçmiş Planlar',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.5,
                 ),
@@ -258,6 +260,7 @@ class _ArchivePlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -266,9 +269,9 @@ class _ArchivePlanCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? AppColors.darkSurface : Colors.white,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFE7ECF3)),
+            border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE7ECF3)),
             boxShadow: const [
               BoxShadow(
                 color: Color(0x0A101828),
@@ -307,7 +310,7 @@ class _ArchivePlanCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFF111827),
+                            color: isDark ? AppColors.darkText : AppColors.lightText,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.2,
                           ),
@@ -316,7 +319,7 @@ class _ArchivePlanCard extends StatelessWidget {
                     Text(
                       createdAt,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -324,9 +327,9 @@ class _ArchivePlanCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(
+              Icon(
                 Icons.chevron_right_rounded,
-                color: Color(0xFF98A2B3),
+                color: isDark ? AppColors.darkTextSub : const Color(0xFF98A2B3),
               ),
             ],
           ),
@@ -341,12 +344,13 @@ class _ArchiveEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: const Color(0xFFE7ECF3)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE7ECF3)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0A101828),
@@ -383,7 +387,7 @@ class _ArchiveEmptyState extends StatelessWidget {
             'Arşiv planın bulunmuyor',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF111827),
+                  color: isDark ? AppColors.darkText : AppColors.lightText,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.2,
                 ),
@@ -393,7 +397,7 @@ class _ArchiveEmptyState extends StatelessWidget {
             'Önceki antrenman planların oluştuğunda burada listelenecek.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                   fontWeight: FontWeight.w600,
                   height: 1.5,
                 ),
@@ -444,6 +448,7 @@ class _ArchiveErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
         const _BrightWorkoutBackground(),
@@ -455,9 +460,9 @@ class _ArchiveErrorView extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 460),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkSurface : Colors.white,
                 borderRadius: BorderRadius.circular(26),
-                border: Border.all(color: const Color(0xFFE7ECF3)),
+                border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE7ECF3)),
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0x0A101828),
@@ -487,7 +492,7 @@ class _ArchiveErrorView extends StatelessWidget {
                     'Arşiv planları yüklenemedi',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: const Color(0xFF111827),
+                          color: isDark ? AppColors.darkText : AppColors.lightText,
                           fontWeight: FontWeight.w900,
                         ),
                   ),
@@ -496,7 +501,7 @@ class _ArchiveErrorView extends StatelessWidget {
                     msg,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF667085),
+                          color: isDark ? AppColors.darkTextSub : AppColors.lightTextSub,
                           fontWeight: FontWeight.w600,
                           height: 1.45,
                         ),
@@ -508,7 +513,7 @@ class _ArchiveErrorView extends StatelessWidget {
                       onPressed: onRetry,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: const Color(0xFF111827),
+                        backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
@@ -546,7 +551,7 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: accent.withValues(alpha: 0.10),
+      color: accent.withOpacity(0.10),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -556,7 +561,7 @@ class _CircleIconButton extends StatelessWidget {
           height: 42,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: accent.withValues(alpha: 0.14)),
+            border: Border.all(color: accent.withOpacity(0.14)),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
@@ -572,12 +577,13 @@ class _LoadingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: const Color(0xFFE7ECF3)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE7ECF3)),
       ),
     );
   }
@@ -588,56 +594,29 @@ class _BrightWorkoutBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return IgnorePointer(
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFFDFEFF),
-              Color(0xFFF7FAFF),
-              Color(0xFFF9FCFF),
-            ],
-          ),
-        ),
+        color: isDark ? AppColors.darkBg : const Color(0xFFF7FAFF),
         child: Stack(
           children: [
             Positioned(
-              top: -80,
-              right: -30,
-              child: Container(
-                width: 220,
-                height: 220,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFF6EA8FF).withValues(alpha: 0.12),
-                ),
-              ),
+              top: -80, right: -30,
+              child: Container(width: 220, height: 220,
+                decoration: BoxDecoration(shape: BoxShape.circle,
+                  color: AppColors.primary.withOpacity(isDark ? 0.10 : 0.06))),
             ),
             Positioned(
-              top: 160,
-              left: -50,
-              child: Container(
-                width: 170,
-                height: 170,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFFF8C5A).withValues(alpha: 0.09),
-                ),
-              ),
+              top: 160, left: -50,
+              child: Container(width: 170, height: 170,
+                decoration: BoxDecoration(shape: BoxShape.circle,
+                  color: AppColors.secondary.withOpacity(isDark ? 0.08 : 0.05))),
             ),
             Positioned(
-              bottom: 100,
-              right: -45,
-              child: Container(
-                width: 180,
-                height: 180,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFF17C67B).withValues(alpha: 0.08),
-                ),
-              ),
+              bottom: 100, right: -45,
+              child: Container(width: 180, height: 180,
+                decoration: BoxDecoration(shape: BoxShape.circle,
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05))),
             ),
           ],
         ),
