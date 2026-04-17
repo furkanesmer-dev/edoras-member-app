@@ -184,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // Başlık
                       Text(
-                        'Tekrar\nHoş Geldin!',
+                        'Hoş Geldin!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 34,
