@@ -558,7 +558,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
+                  color: AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -570,7 +570,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.06),
+                  color: AppColors.secondary.withValues(alpha: isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -582,7 +582,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
+                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -621,7 +621,7 @@ class _SessionsHeroCard extends StatelessWidget {
               height: 88,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF7FB2FF).withOpacity(0.18),
+                color: const Color(0xFF7FB2FF).withValues(alpha: 0.18),
               ),
             ),
           ),
@@ -633,7 +633,7 @@ class _SessionsHeroCard extends StatelessWidget {
               height: 90,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFFFB074).withOpacity(0.13),
+                color: const Color(0xFFFFB074).withValues(alpha: 0.13),
               ),
             ),
           ),
@@ -705,7 +705,7 @@ class _PackageSummaryCard extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF4F7CFF).withOpacity(0.22),
+                      color: const Color(0xFF4F7CFF).withValues(alpha: 0.22),
                       blurRadius: 18,
                       offset: const Offset(0, 8),
                     ),
@@ -813,7 +813,7 @@ class _MiniStatCard extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: accent.withOpacity(0.10),
+              color: accent.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, size: 18, color: accent),
@@ -868,7 +868,7 @@ class _SectionHeader extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: accent.withOpacity(0.10),
+            color: accent.withValues(alpha: 0.10),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(icon, color: accent, size: 21),
@@ -939,11 +939,11 @@ class _SessionPremiumCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                   gradient: LinearGradient(
                     colors: [
-                      accent.withOpacity(0.16),
-                      accent.withOpacity(0.08),
+                      accent.withValues(alpha: 0.16),
+                      accent.withValues(alpha: 0.08),
                     ],
                   ),
-                  border: Border.all(color: accent.withOpacity(0.14)),
+                  border: Border.all(color: accent.withValues(alpha: 0.14)),
                 ),
                 child: Icon(
                   isPast ? Icons.history_toggle_off_rounded : Icons.event_available_rounded,
@@ -1180,7 +1180,7 @@ class _TabButton extends StatelessWidget {
         boxShadow: selected
             ? [
                 BoxShadow(
-                  color: accent.withOpacity(0.22),
+                  color: accent.withValues(alpha: 0.22),
                   blurRadius: 14,
                   offset: const Offset(0, 7),
                 ),
@@ -1211,7 +1211,7 @@ class _TabButton extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   decoration: BoxDecoration(
-                    color: selected ? Colors.white.withOpacity(0.18) : accent.withOpacity(0.10),
+                    color: selected ? Colors.white.withValues(alpha: 0.18) : accent.withValues(alpha: 0.10),
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
@@ -1262,7 +1262,7 @@ class _InfoTile extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.10),
+              color: color.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, size: 18, color: color),
@@ -1324,7 +1324,7 @@ class _EmptyStateCard extends StatelessWidget {
             width: 62,
             height: 62,
             decoration: BoxDecoration(
-              color: accent.withOpacity(0.10),
+              color: accent.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(icon, size: 30, color: accent),
@@ -1455,13 +1455,13 @@ class _PremiumCardSurface extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.28)
-                : AppColors.primary.withOpacity(0.06),
+                ? Colors.black.withValues(alpha: 0.28)
+                : AppColors.primary.withValues(alpha: 0.06),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.18 : 0.04),
+            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
