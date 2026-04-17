@@ -260,7 +260,7 @@ class MySessionsPageState extends State<MySessionsPage> {
 
     if (abonelikTipiRaw == 'aylik') {
       final x = abonelikSuresiAy ?? 0;
-      rightValue = 'Aylık (${x} Ay)';
+      rightValue = 'Aylık ($x Ay)';
 
       leftTitle = 'Kalan Gün';
       final end = _tryParseIso(bitisStr);
