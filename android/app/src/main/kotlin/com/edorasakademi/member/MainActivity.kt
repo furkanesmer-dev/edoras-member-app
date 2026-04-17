@@ -1,4 +1,4 @@
-package com.example.edoras_member_app
+package com.edorasakademi.member
 
 import io.flutter.embedding.android.FlutterActivity
 
