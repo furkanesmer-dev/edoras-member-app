@@ -356,7 +356,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: scheme.primary,
                           foregroundColor: Colors.white, // ✅ yazı garanti
-                          disabledBackgroundColor: scheme.primary.withOpacity(0.6),
+                          disabledBackgroundColor: scheme.primary.withValues(alpha: 0.6),
                           disabledForegroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -482,9 +482,9 @@ class _InfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: scheme.primary.withOpacity(0.06),
+        color: scheme.primary.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: scheme.primary.withOpacity(0.18)),
+        border: Border.all(color: scheme.primary.withValues(alpha: 0.18)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -513,9 +513,9 @@ class _ErrorCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: scheme.error.withOpacity(0.10),
+        color: scheme.error.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: scheme.error.withOpacity(0.25)),
+        border: Border.all(color: scheme.error.withValues(alpha: 0.25)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
