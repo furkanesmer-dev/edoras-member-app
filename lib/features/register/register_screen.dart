@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(colors: [
-                  AppColors.primary.withOpacity(isDark ? 0.18 : 0.10),
+                  AppColors.primary.withValues(alpha: isDark ? 0.18 : 0.10),
                   Colors.transparent,
                 ]),
               ),
@@ -131,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(colors: [
-                  AppColors.secondary.withOpacity(isDark ? 0.14 : 0.08),
+                  AppColors.secondary.withValues(alpha: isDark ? 0.14 : 0.08),
                   Colors.transparent,
                 ]),
               ),
@@ -258,9 +258,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             decoration: BoxDecoration(
-                              color: AppColors.danger.withOpacity(0.10),
+                              color: AppColors.danger.withValues(alpha: 0.10),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppColors.danger.withOpacity(0.30)),
+                              border: Border.all(color: AppColors.danger.withValues(alpha: 0.30)),
                             ),
                             child: Text(
                               _error!,
@@ -279,13 +279,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               gradient: _loading ? null : AppColors.primaryGradient,
-                              color: _loading ? AppColors.primary.withOpacity(0.4) : null,
+                              color: _loading ? AppColors.primary.withValues(alpha: 0.4) : null,
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: _loading
                                   ? null
                                   : [
                                       BoxShadow(
-                                        color: AppColors.primary.withOpacity(0.40),
+                                        color: AppColors.primary.withValues(alpha: 0.40),
                                         blurRadius: 20,
                                         offset: const Offset(0, 8),
                                       ),
