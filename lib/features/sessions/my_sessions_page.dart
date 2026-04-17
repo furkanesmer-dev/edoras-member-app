@@ -72,9 +72,7 @@ class MySessionsPageState extends State<MySessionsPage> {
       final raw = res.data;
 
       if (raw is! Map) throw Exception('Beklenmeyen response');
-      // Backend hem ok hem success döndürebilir; ikisini de destekle.
-      final isOk = raw['ok'] == true || raw['success'] == true;
-      if (!isOk) throw Exception((raw['msg'] ?? raw['message'] ?? 'Hata').toString());
+      if (raw['ok'] != true) throw Exception((raw['msg'] ?? 'Hata').toString());
 
       final data = raw['data'];
       if (data is! Map) throw Exception('data alanı yok');
@@ -82,15 +80,8 @@ class MySessionsPageState extends State<MySessionsPage> {
       final up = (data['upcoming'] is List) ? List.from(data['upcoming']) : [];
       final past = (data['past'] is List) ? List.from(data['past']) : [];
 
-      // Güvenli cast: liste elemanı Map değilse (beklenmeyen backend verisi) atla.
-      final upcoming = up
-          .whereType<Map>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
-      final pastList = past
-          .whereType<Map>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
+      final upcoming = up.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+      final pastList = past.map((e) => Map<String, dynamic>.from(e as Map)).toList();
 
       final paketRaw = data['paket'] ?? data['package'] ?? data['session_info'];
       final paket = (paketRaw is Map)
@@ -107,18 +98,20 @@ class MySessionsPageState extends State<MySessionsPage> {
           ));
 
       if (!mounted) return;
-      // Tab otomatik geçişini aynı setState içinde yaparak double rebuild engellendi.
       setState(() {
         _upcoming = upcoming;
         _past = pastList;
         _paket = paket;
         _loading = false;
-        if (upcoming.isEmpty && pastList.isNotEmpty) _tab = 1;
       });
+
+      if (_upcoming.isEmpty && _past.isNotEmpty && _tab != 1) {
+        setState(() => _tab = 1);
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = "Bir hata oluştu. Lütfen tekrar deneyin.";
+        _error = e.toString();
         _loading = false;
       });
     }
@@ -267,7 +260,7 @@ class MySessionsPageState extends State<MySessionsPage> {
 
     if (abonelikTipiRaw == 'aylik') {
       final x = abonelikSuresiAy ?? 0;
-      rightValue = 'Aylık ($x Ay)';
+      rightValue = 'Aylık (${x} Ay)';
 
       leftTitle = 'Kalan Gün';
       final end = _tryParseIso(bitisStr);
@@ -565,7 +558,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
+                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -577,7 +570,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withValues(alpha: isDark ? 0.10 : 0.06),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -589,7 +582,7 @@ class _BrightSessionsBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.05),
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -628,7 +621,7 @@ class _SessionsHeroCard extends StatelessWidget {
               height: 88,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF7FB2FF).withValues(alpha: 0.18),
+                color: const Color(0xFF7FB2FF).withOpacity(0.18),
               ),
             ),
           ),
@@ -640,30 +633,13 @@ class _SessionsHeroCard extends StatelessWidget {
               height: 90,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFFFB074).withValues(alpha: 0.13),
+                color: const Color(0xFFFFB074).withOpacity(0.13),
               ),
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(999),
-                  color: const Color(0xFFEFF5FF),
-                  border: Border.all(color: const Color(0xFFD8E7FF)),
-                ),
-                child: const Text(
-                  'Seanslarım',
-                  style: TextStyle(
-                    color: Color(0xFF2852C8),
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12,
-                    height: 1,
-                  ),
-                ),
-              ),
               const SizedBox(height: 14),
               Text(
                 'Programını takip et,\nritmini koru.',
@@ -729,7 +705,7 @@ class _PackageSummaryCard extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF4F7CFF).withValues(alpha: 0.22),
+                      color: const Color(0xFF4F7CFF).withOpacity(0.22),
                       blurRadius: 18,
                       offset: const Offset(0, 8),
                     ),
@@ -837,7 +813,7 @@ class _MiniStatCard extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.10),
+              color: accent.withOpacity(0.10),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, size: 18, color: accent),
@@ -892,7 +868,7 @@ class _SectionHeader extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: accent.withValues(alpha: 0.10),
+            color: accent.withOpacity(0.10),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(icon, color: accent, size: 21),
@@ -963,11 +939,11 @@ class _SessionPremiumCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                   gradient: LinearGradient(
                     colors: [
-                      accent.withValues(alpha: 0.16),
-                      accent.withValues(alpha: 0.08),
+                      accent.withOpacity(0.16),
+                      accent.withOpacity(0.08),
                     ],
                   ),
-                  border: Border.all(color: accent.withValues(alpha: 0.14)),
+                  border: Border.all(color: accent.withOpacity(0.14)),
                 ),
                 child: Icon(
                   isPast ? Icons.history_toggle_off_rounded : Icons.event_available_rounded,
@@ -1038,7 +1014,7 @@ class _SessionPremiumCard extends StatelessWidget {
           const SizedBox(height: 14),
           Container(
             height: 1,
-            color: const Color(0xFFE8EEF7),
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7),
           ),
           const SizedBox(height: 14),
           Row(
@@ -1096,9 +1072,9 @@ class _DetailChip extends StatelessWidget {
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkSurface2 : Colors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
@@ -1140,13 +1116,15 @@ class _PremiumPillTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 56,
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F8FD),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFF5F8FD),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE6EDF7)),
+        border: Border.all(
+            color: isDark ? AppColors.darkBorder : const Color(0xFFE6EDF7)),
       ),
       child: Row(
         children: [
@@ -1202,7 +1180,7 @@ class _TabButton extends StatelessWidget {
         boxShadow: selected
             ? [
                 BoxShadow(
-                  color: accent.withValues(alpha: 0.22),
+                  color: accent.withOpacity(0.22),
                   blurRadius: 14,
                   offset: const Offset(0, 7),
                 ),
@@ -1233,7 +1211,7 @@ class _TabButton extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   decoration: BoxDecoration(
-                    color: selected ? Colors.white.withValues(alpha: 0.18) : accent.withValues(alpha: 0.10),
+                    color: selected ? Colors.white.withOpacity(0.18) : accent.withOpacity(0.10),
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
@@ -1274,9 +1252,9 @@ class _InfoTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFBFDFF),
+        color: isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE8EEF7)),
+        border: Border.all(color: isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
       ),
       child: Row(
         children: [
@@ -1284,7 +1262,7 @@ class _InfoTile extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.10),
+              color: color.withOpacity(0.10),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, size: 18, color: color),
@@ -1346,7 +1324,7 @@ class _EmptyStateCard extends StatelessWidget {
             width: 62,
             height: 62,
             decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.10),
+              color: accent.withOpacity(0.10),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(icon, size: 30, color: accent),
@@ -1477,13 +1455,13 @@ class _PremiumCardSurface extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withValues(alpha: 0.28)
-                : AppColors.primary.withValues(alpha: 0.06),
+                ? Colors.black.withOpacity(0.28)
+                : AppColors.primary.withOpacity(0.06),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.04),
+            color: Colors.black.withOpacity(isDark ? 0.18 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
