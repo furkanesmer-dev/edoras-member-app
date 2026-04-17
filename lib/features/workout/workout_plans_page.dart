@@ -551,7 +551,7 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: accent.withOpacity(0.10),
+      color: accent.withValues(alpha: 0.10),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -561,7 +561,7 @@ class _CircleIconButton extends StatelessWidget {
           height: 42,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: accent.withOpacity(0.14)),
+            border: Border.all(color: accent.withValues(alpha: 0.14)),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
@@ -604,19 +604,19 @@ class _BrightWorkoutBackground extends StatelessWidget {
               top: -80, right: -30,
               child: Container(width: 220, height: 220,
                 decoration: BoxDecoration(shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(isDark ? 0.10 : 0.06))),
+                  color: AppColors.primary.withValues(alpha: isDark ? 0.10 : 0.06))),
             ),
             Positioned(
               top: 160, left: -50,
               child: Container(width: 170, height: 170,
                 decoration: BoxDecoration(shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(isDark ? 0.08 : 0.05))),
+                  color: AppColors.secondary.withValues(alpha: isDark ? 0.08 : 0.05))),
             ),
             Positioned(
               bottom: 100, right: -45,
               child: Container(width: 180, height: 180,
                 decoration: BoxDecoration(shape: BoxShape.circle,
-                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05))),
+                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.05))),
             ),
           ],
         ),
