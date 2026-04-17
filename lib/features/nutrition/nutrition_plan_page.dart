@@ -113,10 +113,8 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
             final meal = int.tryParse(entry.key) ?? 0;
             if (meal < 1 || meal > 5) continue;
 
-            final rawList = entry.value;
-            final list = (rawList is List ? rawList : const [])
-                .whereType<Map>()
-                .map((e) => Map<String, dynamic>.from(e))
+            final list = (entry.value as List? ?? const [])
+                .map((e) => Map<String, dynamic>.from(e as Map))
                 .toList();
 
             mapped[meal] = list;
@@ -161,21 +159,15 @@ class NutritionPlanPageState extends State<NutritionPlanPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = "Bir hata oluştu. Lütfen tekrar deneyin.";
+        _error = e.toString();
         _loading = false;
       });
     }
   }
 
   Map<String, dynamic> _extractDataMap(dynamic raw) {
-    if (raw == null) return <String, dynamic>{};
-    final map = (raw is Map) ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
-
-    final hasStatusField = map.containsKey('ok') || map.containsKey('success');
-    if (hasStatusField) {
-      final isOk = map['ok'] == true || map['success'] == true;
-      if (!isOk) return <String, dynamic>{};
-    }
+    final map =
+        (raw is Map) ? Map<String, dynamic>.from(raw) : <String, dynamic>{};
 
     final inner = (map['data'] is Map)
         ? Map<String, dynamic>.from(map['data'])
@@ -356,7 +348,7 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
   final besinId = _extractPlanBesinId(planItem);
   if (besinId == null || besinId <= 0) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Besin Bulunamadı')),
+      const SnackBar(content: Text('besin_id yok')),
     );
     return;
   }
@@ -438,7 +430,7 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('İşlem gerçekleştirilemedi. Lütfen tekrar deneyin.')),
+      SnackBar(content: Text('İşlem yapılamadı: $e')),
     );
   } finally {
     if (mounted) {
@@ -497,11 +489,6 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
                   children: [
-                    _NutritionTopBar(
-                      title: 'Beslenme',
-                      onRefresh: _load,
-                    ),
-                    const SizedBox(height: 14),
                     const _NoPlanCard(),
                   ],
                 ),
@@ -524,7 +511,6 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
                   child: _NutritionPremiumView(
                     tarih: _tarih,
                     onPickDate: _pickDate,
-                    onRefresh: _load,
                     planData: planData,
                     targetKcal: _targetKcal,
                     targetProtein: _targetProtein,
@@ -544,7 +530,7 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
-                        color: Colors.black.withValues(alpha: 0.04),
+                        color: Colors.black.withOpacity(0.04),
                         child: const Center(
                           child: CircularProgressIndicator(
                             color: Color(0xFF4F7CFF),
@@ -565,7 +551,6 @@ Future<void> _toggleConsumed(int mealNo, Map<String, dynamic> planItem) async {
 class _NutritionPremiumView extends StatelessWidget {
   final String tarih;
   final VoidCallback onPickDate;
-  final VoidCallback onRefresh;
   final Map<String, dynamic> planData;
 
   final double? targetKcal;
@@ -587,7 +572,6 @@ class _NutritionPremiumView extends StatelessWidget {
   const _NutritionPremiumView({
     required this.tarih,
     required this.onPickDate,
-    required this.onRefresh,
     required this.planData,
     required this.targetKcal,
     required this.targetProtein,
@@ -626,7 +610,6 @@ class _NutritionPremiumView extends StatelessWidget {
 
     final hedef = _s(program['hedef']);
     final notlar = _s(program['notlar']);
-    final createdAt = _s(planData['created_at'] ?? program['created_at']);
 
     final byOgunRaw = planData['by_ogun'];
     final byOgun = (byOgunRaw is Map)
@@ -645,16 +628,10 @@ class _NutritionPremiumView extends StatelessWidget {
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
       children: [
-        _NutritionTopBar(
-          title: 'Beslenme',
-          onRefresh: onRefresh,
-        ),
-        const SizedBox(height: 14),
         _TopBannerCard(
           tarih: tarih,
           onPickDate: onPickDate,
           hedef: hedef,
-          createdAt: createdAt,
           notlar: notlar,
         ),
         const SizedBox(height: 14),
@@ -775,7 +752,7 @@ class _NutritionBrightBackground extends StatelessWidget {
                 height: 220,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(alpha: isDark ? 0.10 : 0.06),
+                  color: AppColors.primary.withOpacity(isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -787,7 +764,7 @@ class _NutritionBrightBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.05),
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -799,7 +776,7 @@ class _NutritionBrightBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withValues(alpha: isDark ? 0.08 : 0.05),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
@@ -810,52 +787,16 @@ class _NutritionBrightBackground extends StatelessWidget {
   }
 }
 
-class _NutritionTopBar extends StatelessWidget {
-  final String title;
-  final VoidCallback onRefresh;
-
-  const _NutritionTopBar({
-    required this.title,
-    required this.onRefresh,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: isDark ? AppColors.darkText : AppColors.lightText,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -0.5,
-                ),
-          ),
-        ),
-        _CircleIconButton(
-          icon: Icons.refresh_rounded,
-          accent: const Color(0xFF14B86A),
-          onTap: onRefresh,
-        ),
-      ],
-    );
-  }
-}
-
 class _TopBannerCard extends StatelessWidget {
   final String tarih;
   final VoidCallback onPickDate;
   final String hedef;
-  final String createdAt;
   final String notlar;
 
   const _TopBannerCard({
     required this.tarih,
     required this.onPickDate,
     required this.hedef,
-    required this.createdAt,
     required this.notlar,
   });
 
@@ -876,7 +817,7 @@ class _TopBannerCard extends StatelessWidget {
                 height: 54,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
-                  color: const Color(0xFF00A86B).withValues(alpha: 0.10),
+                  color: const Color(0xFF00A86B).withOpacity(0.10),
                 ),
                 child: const Icon(
                   Icons.restaurant_menu_rounded,
@@ -911,7 +852,6 @@ class _TopBannerCard extends StatelessWidget {
               _SoftActionButton(
                 onTap: onPickDate,
                 icon: Icons.calendar_month_rounded,
-                label: 'Tarih',
               ),
             ],
           ),
@@ -927,14 +867,6 @@ class _TopBannerCard extends StatelessWidget {
               icon: Icons.flag_rounded,
               text: 'Hedef: $hedef',
               accent: const Color(0xFFFF7A18),
-            ),
-          ],
-          if (createdAt.isNotEmpty) ...[
-            const SizedBox(height: 10),
-            _MetaChip(
-              icon: Icons.schedule_rounded,
-              text: 'Oluşturulma: $createdAt',
-              accent: const Color(0xFF14B86A),
             ),
           ],
           if (notlar.isNotEmpty) ...[
@@ -981,12 +913,10 @@ class _TopBannerCard extends StatelessWidget {
 class _SoftActionButton extends StatelessWidget {
   final VoidCallback onTap;
   final IconData icon;
-  final String label;
 
   const _SoftActionButton({
     required this.onTap,
     required this.icon,
-    required this.label,
   });
 
   @override
@@ -1009,14 +939,6 @@ class _SoftActionButton extends StatelessWidget {
               Icons.calendar_month_rounded,
               size: 18,
               color: Color(0xFF4F7CFF),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: isDark ? AppColors.darkText : AppColors.lightText,
-              ),
             ),
           ],
         ),
@@ -1043,8 +965,8 @@ class _MetaChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: accent.withValues(alpha: 0.08),
-        border: Border.all(color: accent.withValues(alpha: 0.14)),
+        color: accent.withOpacity(0.08),
+        border: Border.all(color: accent.withOpacity(0.14)),
       ),
       child: Row(
         children: [
@@ -1242,7 +1164,7 @@ class _MacroMiniCard extends StatelessWidget {
                         height: 56 * p,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          color: const Color(0xFF4F7CFF).withValues(alpha: 0.08),
+                          color: const Color(0xFF4F7CFF).withOpacity(0.08),
                         ),
                       );
                     },
@@ -1256,7 +1178,7 @@ class _MacroMiniCard extends StatelessWidget {
                       height: 34,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: const Color(0xFF4F7CFF).withValues(alpha: 0.10),
+                        color: const Color(0xFF4F7CFF).withOpacity(0.10),
                       ),
                       child: Icon(icon, size: 18, color: const Color(0xFF4F7CFF)),
                     ),
@@ -1399,7 +1321,7 @@ class _MealSectionCard extends StatelessWidget {
                   height: 42,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
-                    color: const Color(0xFF00A86B).withValues(alpha: 0.10),
+                    color: const Color(0xFF00A86B).withOpacity(0.10),
                   ),
                   child: const Icon(
                     Icons.restaurant_rounded,
@@ -1423,11 +1345,11 @@ class _MealSectionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(999),
                     color: doneCount > 0
-                        ? const Color(0xFF4F7CFF).withValues(alpha: 0.10)
+                        ? const Color(0xFF4F7CFF).withOpacity(0.10)
                         : const Color(0xFFF5F7FB),
                     border: Border.all(
                       color: doneCount > 0
-                          ? const Color(0xFF4F7CFF).withValues(alpha: 0.20)
+                          ? const Color(0xFF4F7CFF).withOpacity(0.20)
                           : const Color(0xFFE8EEF7),
                     ),
                   ),
@@ -1487,12 +1409,12 @@ class _MealSectionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
                     color: done
-                        ? const Color(0xFF4F7CFF).withValues(alpha: 0.07)
-                        : const Color(0xFFFBFDFF),
+                        ? const Color(0xFF4F7CFF).withOpacity(0.07)
+                        : (isDark ? AppColors.darkSurface2 : const Color(0xFFFBFDFF)),
                     border: Border.all(
                       color: done
-                          ? const Color(0xFF4F7CFF).withValues(alpha: 0.18)
-                          : const Color(0xFFE8EEF7),
+                          ? const Color(0xFF4F7CFF).withOpacity(0.18)
+                          : (isDark ? AppColors.darkBorder : const Color(0xFFE8EEF7)),
                     ),
                   ),
                   child: Row(
@@ -1503,7 +1425,7 @@ class _MealSectionCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: done
-                              ? const Color(0xFF4F7CFF).withValues(alpha: 0.12)
+                              ? const Color(0xFF4F7CFF).withOpacity(0.12)
                               : (isDark ? AppColors.darkSurface2 : Colors.white),
                         ),
                         child: Icon(
@@ -1588,7 +1510,7 @@ class _NoPlanCard extends StatelessWidget {
             height: 74,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFF00A86B).withValues(alpha: 0.10),
+              color: const Color(0xFF00A86B).withOpacity(0.10),
             ),
             child: const Icon(
               Icons.restaurant_menu_rounded,
@@ -1733,7 +1655,7 @@ class _SectionHeader extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: accent.withValues(alpha: 0.10),
+            color: accent.withOpacity(0.10),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(icon, color: accent, size: 21),
@@ -1767,39 +1689,6 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _CircleIconButton extends StatelessWidget {
-  final IconData icon;
-  final Color accent;
-  final VoidCallback onTap;
-
-  const _CircleIconButton({
-    required this.icon,
-    required this.accent,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: accent.withValues(alpha: 0.10),
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: accent.withValues(alpha: 0.14)),
-          ),
-          child: Icon(icon, color: accent, size: 20),
-        ),
-      ),
-    );
-  }
-}
-
 class _PremiumCardSurface extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
@@ -1824,13 +1713,13 @@ class _PremiumCardSurface extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withValues(alpha: 0.30)
-                : const Color(0xFF8DAEF5).withValues(alpha: 0.10),
+                ? Colors.black.withOpacity(0.30)
+                : const Color(0xFF8DAEF5).withOpacity(0.10),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.15 : 0.04),
+            color: Colors.black.withOpacity(isDark ? 0.15 : 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
