@@ -89,7 +89,7 @@ class WorkoutPlanPageState extends State<WorkoutPlanPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = 'Antrenman planı yüklenemedi. Lütfen tekrar deneyin.';
+        _error = e.toString().replaceFirst('Exception: ', '');
         _loading = false;
       });
     }
@@ -587,7 +587,7 @@ class _ExerciseCard extends StatelessWidget {
                   height: 34,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: const Color(0xFF4F7CFF).withValues(alpha: 0.10),
+                    color: const Color(0xFF4F7CFF).withOpacity(0.10),
                   ),
                   child: const Icon(
                     Icons.open_in_full_rounded,
@@ -930,23 +930,6 @@ class _WorkoutHeroCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(999),
-                  color: const Color(0xFFECFDF3),
-                  border: Border.all(color: const Color(0xFFD1FADF)),
-                ),
-                child: const Text(
-                  'Hazır',
-                  style: TextStyle(
-                    color: Color(0xFF067647),
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12,
-                    height: 1,
-                  ),
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -1023,9 +1006,9 @@ class _HeroInfoChip extends StatelessWidget {
       height: 46,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: accent.withValues(alpha: 0.08),
+        color: accent.withOpacity(0.08),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: accent.withValues(alpha: 0.14)),
+        border: Border.all(color: accent.withOpacity(0.14)),
       ),
       child: Row(
         children: [
@@ -1071,7 +1054,7 @@ class _PremiumCardSurface extends StatelessWidget {
         border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withValues(alpha: 0.28) : AppColors.primary.withValues(alpha: 0.06),
+            color: isDark ? Colors.black.withOpacity(0.28) : AppColors.primary.withOpacity(0.06),
             blurRadius: 22,
             offset: const Offset(0, 10),
           ),
@@ -1154,7 +1137,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 240,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(alpha: isDark ? 0.14 : 0.08),
+                  color: AppColors.primary.withOpacity(isDark ? 0.14 : 0.08),
                 ),
               ),
             ),
@@ -1166,7 +1149,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withValues(alpha: isDark ? 0.10 : 0.06),
+                  color: AppColors.secondary.withOpacity(isDark ? 0.10 : 0.06),
                 ),
               ),
             ),
@@ -1178,7 +1161,7 @@ class _BrightWorkoutBackground extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.success.withValues(alpha: isDark ? 0.08 : 0.05),
+                  color: AppColors.success.withOpacity(isDark ? 0.08 : 0.05),
                 ),
               ),
             ),
