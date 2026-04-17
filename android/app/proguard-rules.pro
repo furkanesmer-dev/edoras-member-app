@@ -23,3 +23,7 @@
 # flutter_image_compress
 -keep class com.fluttercandies.compressimage.** { *; }
 -dontwarn com.fluttercandies.**
+
+# Google Play Core (Flutter deferred components - not used but referenced by Flutter engine)
+-dontwarn com.google.android.play.core.**
+-keep class com.google.android.play.core.** { *; }
