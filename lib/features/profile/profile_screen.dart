@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         onPrivacyPolicy: () {
           Navigator.pop(context);
-          _launchUrl('$_siteBase/gizlilik-politikasi');
+          _launchUrl('https://www.edorasakademi.com/privacy-policy.html');
         },
       ),
     );
